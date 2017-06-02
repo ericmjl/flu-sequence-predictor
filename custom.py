@@ -9,11 +9,11 @@ def load_sequence_and_metadata():
     """
     Returns the sequences as a list of SeqRecords, and metadata as a pandas DataFrame.
     """
-    
+
     sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta', 'fasta')]
-    
+
     metadata = pd.read_csv('data/20170531-H3N2-global.tsv', sep='\t', parse_dates=['Collection Date'])
-    
+
     return sequences, metadata
 
 
@@ -23,7 +23,7 @@ def right_pad(sequences):
     """
     padded_sequences = deepcopy(sequences)
     seq_lengths = compute_seq_lengths(sequences)
-    
+
     for s in padded_sequences:
         while len(s) < max(seq_lengths.keys()):
             s.seq += '*'
@@ -38,7 +38,7 @@ def compute_seq_lengths(sequences):
     seq_lengths = Counter(seq_lengths)
     return seq_lengths
 
-    
+
 def seq2chararray(sequences):
     """
     Returns sequences coded as a numpy array. Doesn't perform one-hot-encoding.
@@ -58,14 +58,14 @@ def compute_alphabet(sequences):
     alphabet = set()
     for s in sequences:
         alphabet = alphabet.union(set(s))
-        
+
     return alphabet
 
 
 def encode_array(sequences):
     """
     Performs binary encoding of the sequence array.
-    
+
     Inputs:
     =======
     - seq_array: (numpy array) of characters.
@@ -85,3 +85,10 @@ def encode_array(sequences):
 
     return encoded_array
 
+
+def save_model(model, path):
+    with open(path + '.yaml', 'w+') as f:
+        model_yaml = model.to_yaml()
+        f.write(model_yaml)
+
+    model.save_weights(path + '.h5')
