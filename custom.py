@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.preprocessing import LabelBinarizer
 from collections import Counter
 from copy import deepcopy
+from keras.models import model_from_yaml
 
 def load_sequence_and_metadata():
     """
@@ -92,3 +93,33 @@ def save_model(model, path):
         f.write(model_yaml)
 
     model.save_weights(path + '.h5')
+    
+    
+def load_model(path):
+    with open(path + '.yaml', 'r+') as f:
+        yaml_rep = ''
+        for l in f.readlines():
+            yaml_rep += l
+        
+    model = model_from_yaml(yaml_rep)
+    model.load_weights(path + '.h5')
+    
+    return model
+    
+
+
+def get_density_interval(percentage, array, axis=0):
+    """
+    Returns the highest density interval on the array.
+
+    Parameters:
+    ===========
+    percentage: (float, int) value between 0 and 100, inclusive.
+    array: a numpy array of numbers.
+    """
+    low = (100 - percentage) / 2
+    high = (100 - low)
+
+    lowp, highp = np.percentile(array, [low, high], axis=axis)
+
+    return lowp, highp
