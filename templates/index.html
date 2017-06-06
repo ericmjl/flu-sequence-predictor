@@ -1,6 +1,57 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<meta name="description" content="Simple BioJS example" />
+<!-- you only need to include the MSA scrip -->
+<script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
 
+<div id="yourDiv">press "Run with JS"</div>
+<script>
+    var opts = {
+        el: document.getElementById("yourDiv"),
+        vis: {
+          conserv: false,
+          overviewbox: false
+        },
+        // smaller menu for JSBin
+        // menu: "small",
+        bootstrapMenu: true,
+        importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
+    };
+
+    var m = new msa.msa(opts);
+      m.render();
+
+</script>
+
+{{ js_resources|indent(4)|safe }}
+{{ css_resources|indent(4)|safe }}
+
+{{ script1|indent(4)|safe}}
+{{ script2|indent(4)|safe}}
+{{ script3|indent(4)|safe}}
+
+<div class="row">
+    <div class="col-md-4">
+        {{ div1|indent(4)|safe }}
+    </div>
+    <div class="col-md-4">
+        {{ div2|indent(4)|safe }}
+    </div>
+    <div class="col-md-4">
+        {{ div3|indent(4)|safe }}
+    </div>
+
+</div>
+
+
+<!--
+
+
+
+
+
+
+ -->
 
 {% endblock %}
