@@ -1,4 +1,6 @@
 # These are for deployment onto Heroku.
+pip==9.0.1
+setuptools==23.1.0
 bokeh==0.12.5
 pandas==0.19
 biopython==1.69
