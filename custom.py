@@ -78,6 +78,7 @@ def encode_array(sequences):
     seq_array = seq2chararray(sequences)
     lb = LabelBinarizer()
     lb.fit(list(alphabet))
+    print(len(alphabet))
 
     encoded_array = np.zeros(shape=(seq_array.shape[0], max(seq_lengths.keys()) * len(alphabet)))
 
@@ -85,6 +86,45 @@ def encode_array(sequences):
         encoded_array[:, i*len(alphabet):(i+1)*len(alphabet)] = lb.transform(seq_array[:, i])
 
     return encoded_array
+
+
+def embedding2binary(decoder, predictions):
+    """
+    Decodes the predictions into a binary array.
+    
+    Inputs:
+    =======
+    - decoder: a Keras model.
+    - predictions: a numpy array corresponding to the lower dimensional projection.
+    
+    Returns:
+    ========
+    - a binary encoding numpy array that corresponds to a predicted sequence.
+    """
+    return np.rint(decoder.predict(predictions))
+
+
+def binary2chararray(sequences, binary_array):
+    """
+    Converts a binary array into a character array.
+    """
+
+    alphabet = compute_alphabet(sequences)
+    seq_lengths = compute_seq_lengths(sequences)
+    seq_array = seq2chararray(sequences)
+
+    lb = LabelBinarizer()
+    lb.fit(list(alphabet))
+
+    char_array = np.chararray(shape=(len(binary_array), max(seq_lengths.keys())), unicode=True)
+    
+    for i in range(seq_array.shape[1]):
+        char_array[:, i] = lb.inverse_transform(binary_array[:, i*len(alphabet):(i+1)*len(alphabet)])
+        
+    return char_array
+
+
+
 
 
 def save_model(model, path):
