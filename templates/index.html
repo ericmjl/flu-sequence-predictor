@@ -4,46 +4,72 @@
 <meta name="description" content="Simple BioJS example" />
 <!-- you only need to include the MSA scrip -->
 <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
-
-<div id="yourDiv">press "Run with JS"</div>
-<script>
-    var opts = {
-        el: document.getElementById("yourDiv"),
-        vis: {
-          conserv: false,
-          overviewbox: false
-        },
-        // smaller menu for JSBin
-        // menu: "small",
-        bootstrapMenu: true,
-        importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
-    };
-
-    var m = new msa.msa(opts);
-      m.render();
-
-</script>
-
 {{ js_resources|indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
 
-{{ script1|indent(4)|safe}}
-{{ script2|indent(4)|safe}}
-{{ script3|indent(4)|safe}}
+{{ script1|indent(4)|safe }}
+{{ script2|indent(4)|safe }}
+{{ script3|indent(4)|safe }}
+<div class="container">
+    <h1>Flu Forecaster</h1>
+    <div class="row">
+    <div class="col-md-12">
+            <h2>Predicted Sequences</h2>
+            <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted influenza hemagglutinin sequences for the coming quarter.</p>
+    </div>
+</div>
+    <div class="row">
+    <div class="col-md-1">
 
-<div class="row">
-    <div class="col-md-4">
-        {{ div1|indent(4)|safe }}
     </div>
-    <div class="col-md-4">
-        {{ div2|indent(4)|safe }}
-    </div>
-    <div class="col-md-4">
-        {{ div3|indent(4)|safe }}
-    </div>
+    <div class="col-md-10" id="msa">
+        <script>
+            var opts = {
+                el: document.getElementById("msa"),
+                vis: {
+                  conserv: true,
+                  overviewbox: false,
+                  seqlogo: true,
+                },
+                colorscheme: {
+                  scheme: "zappo"
+                },
+                // smaller menu for JSBin
+                // menu: "small",
+                bootstrapMenu: true,
+                importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
+            };
 
+            var m = new msa.msa(opts);
+              m.render();
+
+        </script>
+    </div>
+    <div class="col-md-1">
+
+    </div>
 </div>
 
+
+<div class="row">
+        <div class="col-md-12">
+            <h2>Evolutionary Trajectory</h2>
+        </div>
+</div>
+
+    <div class="row">
+        <div class="col-md-4">
+            {{ div1|indent(4)|safe }}
+        </div>
+        <div class="col-md-4">
+            {{ div2|indent(4)|safe }}
+        </div>
+        <div class="col-md-4">
+            {{ div3|indent(4)|safe }}
+        </div>
+
+</div>
+</div>
 
 <!--
 

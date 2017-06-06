@@ -8,13 +8,14 @@ from bokeh.resources import INLINE
 
 import pandas as pd
 import os
+from Bio import SeqIO
 
 from flask import Flask, render_template
 
 app = Flask(__name__)
 
-data = pd.read_csv('data/metadata_with_embeddings.csv', index_col=0,
-                   parse_dates=['Collection Date'])
+data = pd.read_csv('https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/metadata_with_embeddings.csv',
+                   index_col=0, parse_dates=['Collection Date'])
 data = data.set_index('Collection Date').resample('Q').mean()
 palette = inferno(len(data))
 data['palette'] = palette
@@ -61,11 +62,15 @@ def home():
 
     # print(script1, div1, script2, div2, script3, div3)
 
+    seqs = [s for s in SeqIO.parse('data/oneQ_predictions.fasta', 'fasta')]
+    n_seqs = len(seqs)
+
     return render_template('index.html', js_resources=js_resources,
                            css_resources=css_resources,
                            script1=script1, div1=div1,
                            script2=script2, div2=div2,
-                           script3=script3, div3=div3, cwd=os.getcwd())
+                           script3=script3, div3=div3, cwd=os.getcwd(),
+                           n_seqs=n_seqs)
 
 
 if __name__ == '__main__':
