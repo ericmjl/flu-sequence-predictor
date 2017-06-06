@@ -1,4 +1,4 @@
 # These are for deployment onto Heroku.
-bokeh=0.12.5
-pandas=0.19
-biopython=1.69
+bokeh==0.12.5
+pandas==0.19
+biopython==1.69
