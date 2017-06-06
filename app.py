@@ -5,7 +5,6 @@ from bokeh.palettes import inferno
 from bokeh.models import ColumnDataSource
 from bokeh.embed import components
 from bokeh.resources import INLINE
-from bokeh.util.string import encode_utf8
 
 import pandas as pd
 import os
