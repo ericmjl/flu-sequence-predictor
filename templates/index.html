@@ -13,6 +13,36 @@
     <div class="row" id="page-heading">
         <div class="col-md-12">
             <h1>Flu Forecaster</h1>
+            <p>by <a href="https://www.linkedin.com/in/ericmjl/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
+        </div>
+    </div>
+    <div class="row" id="introduction-header">
+        <div class="col-md-12">
+            <h2>Introduction</h2>
+        </div>
+    </div>
+    <div class="row" id="introduction-text-container">
+        <div class="col-md-8" id="introduction-text">
+            <h3>Influenza Vaccine Development</h3>
+            <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
+
+            <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
+        </div>
+        <div class="col-md-4" id="fig-vaccine">
+            <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production.jpg" alt="Vaccine production lag time." width="300px">
+            <p>Large lag time from vaccine strain selection to actual deployment.</p>
+        </div>
+    </div>
+    <div class="row" id="introduction-text-container-2">
+        <div class="col-md-8" id="">
+            <p>There is a lost business opportunity here, as studies by the CDC are showing that <a href="https://www.cdc.gov/mmwr/volumes/66/wr/mm6606a3.htm?s_cid=mm6606a3_w">the 2017 vaccine efficacy is below 50%</a>, with some years dropping to below 20% efficacy. Sustained lack of efficacy may result in a lack of public confidence in vaccination. The most immediate impact would be a contraction in the market for vaccines, followed by adverse impacts for public health. With a <a href="http://www.cnbc.com/2015/10/19/the-16-billion-business-of-flu.html">USD 4 billion dollars market size globally</a>, vaccine manufacturers cannot afford for public confidence to be eroded.</p>
+
+            <p><b>Good science can help make vaccines that better match what will actually be circulating, which is good business sense, and that is the goal of this project.</b></p>
+        </div>
+        <div class="col-md-4">
+            {{ ve_script|safe }}
+            {{ ve_div|safe }}
+            <p>Vaccine effectiveness has not historically been high.</p>
         </div>
     </div>
     <div class="row" id="predicted-sequences-container">
