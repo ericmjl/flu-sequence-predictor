@@ -2,7 +2,6 @@
 
 {% block body %}
 <meta name="description" content="Simple BioJS example" />
-<!-- you only need to include the MSA scrip -->
 <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
 {{ js_resources|indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
@@ -47,7 +46,6 @@
             </script>
         </div>
     </div>
-
     <div class="row" id="evoluiontary-trajectory-text-container">
         <div class="col-md-12" id="evolutionary-trajectory-text">
             <h2>Evolutionary Trajectory</h2>
@@ -77,31 +75,47 @@
         <div class="col-md-4" id="vaccine-background-text">
             <h3>Vaccine Production</h3>
             <p>In simple terms, vaccine strain production lags deployment by about 6 months. The vaccine strain that eventually makes it into the vaccines that are produced are not based on a notion of what a "future" strain will look like; rather, they simply are picked from the currently circulating strains.</p>
-
-            <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
         </div>
         <div class="col-md-4" id="variational-autoencoder-text">
             <h3>Variational Autoencoders (VAEs)</h3>
             <p>Variational autoencoders are used here to learn a "latent embedding" of the influenza protein sequence. By "autoencoders", we attempt to reconstruct the input as the output. By "variational", we are aiming to learn not just the "point estimate" in "latent embedding" space, but also the probability distribution in "latent land" that corresponds to a particular sequence.</p>
-
-            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
         </div>
         <div class="col-md-4" id="gaussian-process-text">
             <h3>Gaussian Processes (GPs)</h3>
             <p>Gaussian Processes are a Bayesian machine learning method that, given a set of data points sample from a non-linear function, will return a probability distribution over the possible functions that fit the dataset. In time-series land, it can be used to predict the probability distribution over future values of interest.</p>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" id="vaccine-background-basically">
+            <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
+        </div>
+        <div class="col-md-4" id="vae-basically">
+            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
+        </div>
+        <div class="col-md-4" id="gp-basically">
             <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
         </div>
     </div>
+    <div class="row" id="improvements-text-container">
+        <div class="col-md-12">
+            <h2>Improvements</h2>
+            <p>Data-driven science is never really done. Here's how I think this project can be taken to the next level.</p>
+        </div>
+    </div>
+    <div class="row" id="improvements-explanation-container">
+        <div class="col-md-4" id="gp-training-text">
+            <h3>GP Training</h3>
+            <p>Right now, we are making predictions on the forecasted sequences one quarter out, and are only predicting the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>
+
+            <p>Apart from this, the GP coordinate dimensions are trained independently. It would be better to train the GP on all 3 dimensions jointly. However, this would also require greater compute resources.</p>
+        </div>
+        <div class="col-md-4" id="forecasting-validation">
+            <h3>Forecasting Validation</h3>
+            <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
+
+            <p>For more information on the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
+        </div>
+    </div>
 </div>
-
-<!--
-
-
-
-
-
-
- -->
 
 {% endblock %}
