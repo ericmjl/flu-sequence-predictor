@@ -11,13 +11,15 @@
 {{ script2|indent(4)|safe }}
 {{ script3|indent(4)|safe }}
 <div class="container">
-    <h1>Flu Forecaster</h1>
-    <div class="row">
-    <div class="col-md-12">
-        <h2>Predicted Sequences</h2>
-        <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
+    <div class="row" id="page-heading">
+        <h1>Flu Forecaster</h1>
     </div>
-</div>
+    <div class="row" id="predicted-sequences-container">
+        <div class="col-md-12">
+            <h2>Predicted Sequences</h2>
+            <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
+        </div>
+    </div>
     <div class="row" id="multiple-sequence-alignment-container">
         <div class="col-md-12" id="multiple-sequence-alignment">
             <script>
@@ -29,7 +31,7 @@
                       seqlogo: true,
                     },
                     colorscheme: {
-                      scheme: "zappo"
+                      scheme: "clustal2"
                     },
                     // smaller menu for JSBin
                     // menu: "small",
