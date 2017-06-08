@@ -1,5 +1,3 @@
-from Bio import SeqIO
-import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelBinarizer
 from collections import Counter
@@ -35,7 +33,8 @@ def seq2chararray(sequences):
     """
     padded_sequences = right_pad(sequences)
     seq_lengths = compute_seq_lengths(sequences)
-    char_array = np.chararray(shape=(len(sequences), max(seq_lengths.keys())), unicode=True)
+    char_array = np.chararray(shape=(len(sequences), max(seq_lengths.keys())),
+                              unicode=True)
     for i, seq in enumerate(padded_sequences):
         char_array[i, :] = list(seq)
     return char_array
@@ -59,7 +58,8 @@ def encode_array(sequences):
     Inputs:
     =======
     - seq_array: (numpy array) of characters.
-    - seq_lengths: (Counter) dictionary; key::sequence length; value::number of sequences with that length.
+    - seq_lengths: (Counter) dictionary; key::sequence length; value::number of
+                   sequences with that length.
     """
     # Binarize the features to one-of-K encoding.
     alphabet = compute_alphabet(sequences)
@@ -69,10 +69,12 @@ def encode_array(sequences):
     lb.fit(list(alphabet))
     print(len(alphabet))
 
-    encoded_array = np.zeros(shape=(seq_array.shape[0], max(seq_lengths.keys()) * len(alphabet)))
+    encoded_array = np.zeros(shape=(seq_array.shape[0],
+                                    max(seq_lengths.keys()) * len(alphabet)))
 
     for i in range(seq_array.shape[1]):
-        encoded_array[:, i*len(alphabet):(i+1)*len(alphabet)] = lb.transform(seq_array[:, i])
+        encoded_array[:, i*len(alphabet):(i+1)*len(alphabet)] = \
+            lb.transform(seq_array[:, i])
 
     return encoded_array
 
@@ -84,7 +86,8 @@ def embedding2binary(decoder, predictions):
     Inputs:
     =======
     - decoder: a Keras model.
-    - predictions: a numpy array corresponding to the lower dimensional projection.
+    - predictions: a numpy array corresponding to the lower dimensional
+                   projection.
 
     Returns:
     ========
@@ -105,15 +108,14 @@ def binary2chararray(sequences, binary_array):
     lb = LabelBinarizer()
     lb.fit(list(alphabet))
 
-    char_array = np.chararray(shape=(len(binary_array), max(seq_lengths.keys())), unicode=True)
+    char_array = np.chararray(shape=(len(binary_array),
+                              max(seq_lengths.keys())), unicode=True)
 
     for i in range(seq_array.shape[1]):
-        char_array[:, i] = lb.inverse_transform(binary_array[:, i*len(alphabet):(i+1)*len(alphabet)])
+        char_array[:, i] = lb.inverse_transform(
+            binary_array[:, i*len(alphabet):(i+1)*len(alphabet)])
 
     return char_array
-
-
-
 
 
 def save_model(model, path):
@@ -134,7 +136,6 @@ def load_model(path):
     model.load_weights(path + '.h5')
 
     return model
-
 
 
 def get_density_interval(percentage, array, axis=0):
