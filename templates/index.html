@@ -48,15 +48,68 @@
         </div>
     </div>
     <div class="row" id="data-text-container">
-        <div class="col-md-8">
+        <div class="col-md-8" id="data-source-text">
             <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
 
             <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" id="data-per-year-plot">
             {{ nseq_script|safe }}
             {{ nseq_div|safe }}
-            <p><i>A chart showing the number of influenza sequences per year in the dataset collected.</i></p>
+            <p><i>Number of influenza sequences per year in the dataset used for Flu Forecaster.</i></p>
+        </div>
+    </div>
+    <div class="row" id="method-tabs-row">
+        <div class="col-md-6" id="tools-tabs-container">
+            <h2>Tools</h2>
+            <p>Click on the navigation tabs below to view more details about the data processing and machine learning methods deployed behind this dashboard.</p>
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#preprocessing" aria-controls="preprocessing" role="tab" data-toggle="tab"> Preprocessing</a></li>
+                <li role="presentation"><a href="#vae" aria-controls="vae" role="tab" data-toggle="tab">VAE</a></li>
+                <li role="presentation"><a href="#gp" aria-controls="gp" role="tab" data-toggle="tab">GP</a></li>
+            </ul>
+            <!-- Content in Navigation Tabs -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="preprocessing">
+                    <h3>Sequence Padding</h3>
+                    <p>Contrary to what might be common thought, multiple sequence alignment was not done prior to conversion to a numerical form. Rather, I first computed the maximum sequence length represented inside the set of sequences downloaded, and padded <code>*</code> (asterisk) characters on each sequence until all of them fit that length. </p>
+
+                    <p>This done using custom Python code and the <code>BioPython</code> package.</p>
+
+                    <h3>One-Hot Encoding</h3>
+                    <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
+
+                    <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="vae">
+                    <h3>Variational Autoencoders (VAEs)</h3>
+                    <p>VAEs are used here to learn a "latent embedding" of the influenza protein sequence. The goal of autoencoders is to reconstruct the input as the output, while simultaneously learning a compressed "latent" representation of the original data. If I learn a 3-dimensional embedding, then each protein sequence gets three points that identify it in latent space. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences.</p>
+
+                    <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
+
+                    <p>Here, after converting the sequences to a binary encoding, I passed the binary-encoded matrix through a VAE to learn a 3D embedding, which you can visualize below.</p>
+
+                    <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
+
+                    <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
+
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="gp">
+                    <h3>Gaussian Processes (GPs)</h3>
+                    <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
+
+                    <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>
+
+                    <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
+
+                    <p>GPs here were implemented using <code>PyMC3</code>.</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" id="">
+
         </div>
     </div>
     <div class="row" id="predicted-sequences-container">
@@ -117,11 +170,11 @@
         </div>
         <div class="col-md-4" id="variational-autoencoder-text">
             <h3>Variational Autoencoders (VAEs)</h3>
-            <p>Variational autoencoders are used here to learn a "latent embedding" of the influenza protein sequence. By "autoencoders", we attempt to reconstruct the input as the output. By "variational", we are aiming to learn not just the "point estimate" in "latent embedding" space, but also the probability distribution in "latent land" that corresponds to a particular sequence.</p>
+            <p></p>
         </div>
         <div class="col-md-4" id="gaussian-process-text">
             <h3>Gaussian Processes (GPs)</h3>
-            <p>Gaussian Processes are a Bayesian machine learning method that, given a set of data points sample from a non-linear function, will return a probability distribution over the possible functions that fit the dataset. In time-series land, it can be used to predict the probability distribution over future values of interest.</p>
+            <p></p>
         </div>
     </div>
     <div class="row">
@@ -129,10 +182,8 @@
             <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
         </div>
         <div class="col-md-4" id="vae-basically">
-            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
         </div>
         <div class="col-md-4" id="gp-basically">
-            <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
         </div>
     </div>
     <div class="row" id="improvements-text-container">

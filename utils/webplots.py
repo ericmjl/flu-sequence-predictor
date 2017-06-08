@@ -1,7 +1,7 @@
 from bokeh.layouts import row
 from bokeh.plotting import figure
 from bokeh.palettes import inferno
-from bokeh.models import ColumnDataSource
+from bokeh.models import ColumnDataSource, Range1d
 from bokeh.embed import components
 from utils.data import load_sequence_and_metadata
 
@@ -24,6 +24,7 @@ def make_vaccine_effectiveness_plot():
     p = figure(plot_width=350, plot_height=200, tools='pan,crosshair,reset')
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
+    p.y_range = Range1d(0, 100)
     p.line(x=df['Season Start'], y=df['Overall VE'])
     p.circle(x=df['Season Start'], y=df['Overall VE'])
     return components(p)
