@@ -6,9 +6,6 @@
 {{ js_resources|indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
 
-{{ script1|indent(4)|safe }}
-{{ script2|indent(4)|safe }}
-{{ script3|indent(4)|safe }}
 <div class="container">
     <div class="row" id="page-heading">
         <div class="col-md-12">
@@ -29,8 +26,8 @@
             <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
         </div>
         <div class="col-md-4" id="fig-vaccine">
-            <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production.jpg" alt="Vaccine production lag time." width="300px">
-            <p>Large lag time from vaccine strain selection to actual deployment.</p>
+            <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production.jpg" alt="Vaccine production lag time." width="350px">
+            <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
         </div>
     </div>
     <div class="row" id="introduction-text-container-2">
@@ -42,7 +39,24 @@
         <div class="col-md-4">
             {{ ve_script|safe }}
             {{ ve_div|safe }}
-            <p>Vaccine effectiveness has not historically been high.</p>
+            <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
+        </div>
+    </div>
+    <div class="row" id="data-title-container">
+        <div class="col-md-12">
+            <h3>Data</h3>
+        </div>
+    </div>
+    <div class="row" id="data-text-container">
+        <div class="col-md-8">
+            <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
+
+            <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
+        </div>
+        <div class="col-md-4">
+            {{ nseq_script|safe }}
+            {{ nseq_div|safe }}
+            <p><i>A chart showing the number of influenza sequences per year in the dataset collected.</i></p>
         </div>
     </div>
     <div class="row" id="predicted-sequences-container">
@@ -85,14 +99,9 @@
         </div>
     </div>
     <div class="row" id="evolutionary-trajectory-plots-container">
-        <div class="col-md-4" id="evolutionary-trajectory-plot1">
-            {{ div1|indent(4)|safe }}
-        </div>
-        <div class="col-md-4" id="evolutionary-trajectory-plot2">
-            {{ div2|indent(4)|safe }}
-        </div>
-        <div class="col-md-4" id="evolutionary-trajectory-plot3">
-            {{ div3|indent(4)|safe }}
+        <div class="col-md-12" id="evolutionary-trajectory-plot">
+            {{ evo_script|indent(4)|safe }}
+            {{ evo_div|indent(4)|safe }}
         </div>
     </div>
     <div class="row" id="science-explanation-header-container">

@@ -6,17 +6,6 @@ from collections import Counter
 from copy import deepcopy
 from keras.models import model_from_yaml
 
-def load_sequence_and_metadata():
-    """
-    Returns the sequences as a list of SeqRecords, and metadata as a pandas DataFrame.
-    """
-
-    sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta', 'fasta')]
-
-    metadata = pd.read_csv('data/20170531-H3N2-global.tsv', sep='\t', parse_dates=['Collection Date'])
-
-    return sequences, metadata
-
 
 def right_pad(sequences):
     """
@@ -91,12 +80,12 @@ def encode_array(sequences):
 def embedding2binary(decoder, predictions):
     """
     Decodes the predictions into a binary array.
-    
+
     Inputs:
     =======
     - decoder: a Keras model.
     - predictions: a numpy array corresponding to the lower dimensional projection.
-    
+
     Returns:
     ========
     - a binary encoding numpy array that corresponds to a predicted sequence.
@@ -117,10 +106,10 @@ def binary2chararray(sequences, binary_array):
     lb.fit(list(alphabet))
 
     char_array = np.chararray(shape=(len(binary_array), max(seq_lengths.keys())), unicode=True)
-    
+
     for i in range(seq_array.shape[1]):
         char_array[:, i] = lb.inverse_transform(binary_array[:, i*len(alphabet):(i+1)*len(alphabet)])
-        
+
     return char_array
 
 
@@ -133,19 +122,19 @@ def save_model(model, path):
         f.write(model_yaml)
 
     model.save_weights(path + '.h5')
-    
-    
+
+
 def load_model(path):
     with open(path + '.yaml', 'r+') as f:
         yaml_rep = ''
         for l in f.readlines():
             yaml_rep += l
-        
+
     model = model_from_yaml(yaml_rep)
     model.load_weights(path + '.h5')
-    
+
     return model
-    
+
 
 
 def get_density_interval(percentage, array, axis=0):
