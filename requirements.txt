@@ -8,3 +8,6 @@ pandas==0.19
 biopython==1.69
 flask==0.12
 gunicorn==19.7.1
+lxml==3.8.0
+beautifulsoup4==4.6.0
+html5lib==0.999999999

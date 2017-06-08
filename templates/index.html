@@ -2,18 +2,61 @@
 
 {% block body %}
 <meta name="description" content="Simple BioJS example" />
-<!-- you only need to include the MSA scrip -->
 <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
 {{ js_resources|indent(4)|safe }}
 {{ css_resources|indent(4)|safe }}
 
-{{ script1|indent(4)|safe }}
-{{ script2|indent(4)|safe }}
-{{ script3|indent(4)|safe }}
 <div class="container">
     <div class="row" id="page-heading">
         <div class="col-md-12">
             <h1>Flu Forecaster</h1>
+            <p>by <a href="https://www.linkedin.com/in/ericmjl/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
+        </div>
+    </div>
+    <div class="row" id="introduction-header">
+        <div class="col-md-12">
+            <h2>Introduction</h2>
+        </div>
+    </div>
+    <div class="row" id="introduction-text-container">
+        <div class="col-md-8" id="introduction-text">
+            <h3>Influenza Vaccine Development</h3>
+            <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
+
+            <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
+        </div>
+        <div class="col-md-4" id="fig-vaccine">
+            <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production.jpg" alt="Vaccine production lag time." width="350px">
+            <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
+        </div>
+    </div>
+    <div class="row" id="introduction-text-container-2">
+        <div class="col-md-8" id="">
+            <p>There is a lost business opportunity here, as studies by the CDC are showing that <a href="https://www.cdc.gov/mmwr/volumes/66/wr/mm6606a3.htm?s_cid=mm6606a3_w">the 2017 vaccine efficacy is below 50%</a>, with some years dropping to below 20% efficacy. Sustained lack of efficacy may result in a lack of public confidence in vaccination. The most immediate impact would be a contraction in the market for vaccines, followed by adverse impacts for public health. With a <a href="http://www.cnbc.com/2015/10/19/the-16-billion-business-of-flu.html">USD 4 billion dollars market size globally</a>, vaccine manufacturers cannot afford for public confidence to be eroded.</p>
+
+            <p><b>Good science can help make vaccines that better match what will actually be circulating, which is good business sense, and that is the goal of this project.</b></p>
+        </div>
+        <div class="col-md-4">
+            {{ ve_script|safe }}
+            {{ ve_div|safe }}
+            <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
+        </div>
+    </div>
+    <div class="row" id="data-title-container">
+        <div class="col-md-12">
+            <h3>Data</h3>
+        </div>
+    </div>
+    <div class="row" id="data-text-container">
+        <div class="col-md-8">
+            <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
+
+            <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
+        </div>
+        <div class="col-md-4">
+            {{ nseq_script|safe }}
+            {{ nseq_div|safe }}
+            <p><i>A chart showing the number of influenza sequences per year in the dataset collected.</i></p>
         </div>
     </div>
     <div class="row" id="predicted-sequences-container">
@@ -47,7 +90,6 @@
             </script>
         </div>
     </div>
-
     <div class="row" id="evoluiontary-trajectory-text-container">
         <div class="col-md-12" id="evolutionary-trajectory-text">
             <h2>Evolutionary Trajectory</h2>
@@ -57,14 +99,9 @@
         </div>
     </div>
     <div class="row" id="evolutionary-trajectory-plots-container">
-        <div class="col-md-4" id="evolutionary-trajectory-plot1">
-            {{ div1|indent(4)|safe }}
-        </div>
-        <div class="col-md-4" id="evolutionary-trajectory-plot2">
-            {{ div2|indent(4)|safe }}
-        </div>
-        <div class="col-md-4" id="evolutionary-trajectory-plot3">
-            {{ div3|indent(4)|safe }}
+        <div class="col-md-12" id="evolutionary-trajectory-plot">
+            {{ evo_script|indent(4)|safe }}
+            {{ evo_div|indent(4)|safe }}
         </div>
     </div>
     <div class="row" id="science-explanation-header-container">
@@ -77,31 +114,47 @@
         <div class="col-md-4" id="vaccine-background-text">
             <h3>Vaccine Production</h3>
             <p>In simple terms, vaccine strain production lags deployment by about 6 months. The vaccine strain that eventually makes it into the vaccines that are produced are not based on a notion of what a "future" strain will look like; rather, they simply are picked from the currently circulating strains.</p>
-
-            <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
         </div>
         <div class="col-md-4" id="variational-autoencoder-text">
             <h3>Variational Autoencoders (VAEs)</h3>
             <p>Variational autoencoders are used here to learn a "latent embedding" of the influenza protein sequence. By "autoencoders", we attempt to reconstruct the input as the output. By "variational", we are aiming to learn not just the "point estimate" in "latent embedding" space, but also the probability distribution in "latent land" that corresponds to a particular sequence.</p>
-
-            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
         </div>
         <div class="col-md-4" id="gaussian-process-text">
             <h3>Gaussian Processes (GPs)</h3>
             <p>Gaussian Processes are a Bayesian machine learning method that, given a set of data points sample from a non-linear function, will return a probability distribution over the possible functions that fit the dataset. In time-series land, it can be used to predict the probability distribution over future values of interest.</p>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" id="vaccine-background-basically">
+            <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
+        </div>
+        <div class="col-md-4" id="vae-basically">
+            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
+        </div>
+        <div class="col-md-4" id="gp-basically">
             <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
         </div>
     </div>
+    <div class="row" id="improvements-text-container">
+        <div class="col-md-12">
+            <h2>Improvements</h2>
+            <p>Data-driven science is never really done. Here's how I think this project can be taken to the next level.</p>
+        </div>
+    </div>
+    <div class="row" id="improvements-explanation-container">
+        <div class="col-md-4" id="gp-training-text">
+            <h3>GP Training</h3>
+            <p>Right now, we are making predictions on the forecasted sequences one quarter out, and are only predicting the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>
+
+            <p>Apart from this, the GP coordinate dimensions are trained independently. It would be better to train the GP on all 3 dimensions jointly. However, this would also require greater compute resources.</p>
+        </div>
+        <div class="col-md-4" id="forecasting-validation">
+            <h3>Forecasting Validation</h3>
+            <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
+
+            <p>For more information ongi the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
+        </div>
+    </div>
 </div>
-
-<!--
-
-
-
-
-
-
- -->
 
 {% endblock %}
