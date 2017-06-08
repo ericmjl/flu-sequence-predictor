@@ -4,7 +4,8 @@ import pandas as pd
 
 def load_sequence_and_metadata():
     """
-    Returns the sequences as a list of SeqRecords, and metadata as a pandas DataFrame.
+    Returns the sequences as a list of SeqRecords, and metadata as a pandas
+    DataFrame.
     """
 
     sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta',
