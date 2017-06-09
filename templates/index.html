@@ -247,11 +247,14 @@
             // smaller menu for JSBin
             // menu: "small",
             bootstrapMenu: true,
-            importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
+            // importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
         };
 
         var m = new msa.msa(opts);
-          m.render();
+        msa.io.fasta.read("https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta", function(err, seqs){
+        	m.seqs.reset(seqs);
+        	m.render();
+        //   m.render();
 
     </script>
 
