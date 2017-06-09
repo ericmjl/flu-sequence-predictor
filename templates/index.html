@@ -131,7 +131,7 @@
         </div>
         <div class="col-md-4" id="vae-column">
             <h3>Variational Autoencoders</h3>
-            <p>VAEs were used to learn a continuous representation of the protein sequence on which a Gaussian Process regression model could be used for forecasting.</p>
+            <p>VAEs were used to learn a continuous latent embedding/representation of the binary encoded protein sequence on which a Gaussian Process regression model could be used for forecasting. The encoder network compresses the data to the latent embedding, and the decoder network reconstructs sequences from latent embedding coordinates.</p>
 
             <button type="button" name="learn-more-vae" class="btn btn-primary" data-toggle="modal" data-target="#vaeModal">Learn More</button>
 
