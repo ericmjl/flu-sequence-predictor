@@ -50,18 +50,18 @@
             <p><i>Number of influenza sequences per year in the dataset used for Flu Forecaster.</i></p>
         </div>
     </div>
-    <div class="row" id="analysis-methods-and-tools-tabs-row">
-        <div class="col-md-12" id="analysis-methods-and-tools-tabs-container">
+    <div class="row" id="analysis-methods-and-tools-header-row">
+        <div class="col-md-12" id="analysis-methods-and-tools-header-container">
             <h2>Analysis Methods and Tools</h2>
             <p>Click on the navigation tabs below to view more details about the data processing and machine learning methods deployed behind this dashboard.</p>
             <!-- Navigation Tabs -->
-            <ul class="nav nav-tabs" role="tablist">
+            <!-- <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#preprocessing" aria-controls="preprocessing preprocessing-fig" role="tab" data-toggle="tab"> Preprocessing</a></li>
                 <li role="presentation"><a href="#vae" aria-controls="vae" role="tab" data-toggle="tab">Variational Autoencoders</a></li>
                 <li role="presentation"><a href="#gp" aria-controls="gp" role="tab" data-toggle="tab">Gaussian Process Regression</a></li>
-            </ul>
+            </ul> -->
             <!-- Content in Navigation Tabs -->
-            <div class="tab-content">
+            <!-- <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active" id="preprocessing">
                     <div class="col-md-6" id="preprocessing-text">
                         <h3>Sequence Padding</h3>
@@ -82,16 +82,6 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="vae">
                     <div class="col-md-6">
-                        <h3>Variational Autoencoders (VAEs)</h3>
-                        <p>Autoencoders reconstruct the input as the output, and simultaneously learn a lower-dimensional "latent" representation of the original data. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences.</p>
-
-                        <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
-
-                        <p>Here, after converting the sequences to a binary encoding, I passed the binary-encoded matrix through a VAE to learn a 3D embedding, which you can visualize below.</p>
-
-                        <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
-
-                        <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
                     </div>
                     <div class="col-md-6">
                         <h3>Figure!</h3>
@@ -99,17 +89,97 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="gp">
                     <div class="col-md-6">
-                        <h3>Gaussian Processes (GPs)</h3>
-                        <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
-
-                        <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>
-
-                        <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
-
-                        <p>GPs here were implemented using <code>PyMC3</code>.</p>
                     </div>
                     <div class="col-md-6">
                         <h3>Figure!</h3>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="row" id="analysis-methods-and-tools-text-row">
+        <div class="col-md-4" id="preprocessing-column">
+            <h3>Preprocessing</h3>
+            <p>Sequences were padded with <code>*</code> (asterisk) characters to the maximal length. They were then one-hot-encoded at each position, yielding a sparse binary matrix representation of each protein's amino acid sequence.</p>
+
+            <button type="button" name="learn-more-preprocessing" class="btn btn-primary" data-toggle="modal" data-target="#preprocessingModal">Learn More</button>
+
+            <div class="modal fade" id="preprocessingModal" tabindex="-1" role="dialog" aria-labelledby="preprocessing-modal-title">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="preprocessing-modal-title"> Preprocessing</h3>
+                        </div>
+                        <div class="modal-body" id="modal-body-preprocessing">
+                            <!-- <h4>Illustration</h4> -->
+                            <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/preprocessing-figures.jpg" alt="" width=80%>
+                            <!-- <p><i>Padding and encoding of protein sequences, visualized.</i></p> -->
+                            <h4>Sequence Padding</h4>
+                            <p>Contrary to what might be common thought, multiple sequence alignment was not done prior to conversion to a numerical form. Rather, I first computed the maximum sequence length represented inside the set of sequences downloaded, and padded <code>*</code> (asterisk) characters on each sequence until all of them fit that length. </p>
+
+                            <p>This done using custom Python code and the <code>BioPython</code> and <code>numpy</code> packages.</p>
+
+                            <h4>One-Hot Encoding</h4>
+                            <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
+
+                            <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" id="vae-column">
+            <h3>Variational Autoencoders</h3>
+            <p>VAEs were used to learn a continuous representation of the protein sequence on which a Gaussian Process regression model could be used for forecasting.</p>
+
+            <button type="button" name="learn-more-vae" class="btn btn-primary" data-toggle="modal" data-target="#vaeModal">Learn More</button>
+
+            <div class="modal fade" id="vaeModal" tabindex="-1" role="dialog" aria-labelledby="vae-modal-title">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="vae-modal-title">Variational Autoencoders</h3>
+                        </div>
+                        <div class="modal-body" id="modal-body-vae">
+                            <p>Autoencoders reconstruct the input as the output, and simultaneously learn a lower-dimensional "latent" representation of the original data. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences.</p>
+
+                            <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
+
+                            <p>Here, after converting the sequences to a binary encoding, I passed the binary-encoded matrix through a VAE to learn a 3D embedding, which you can visualize below.</p>
+
+                            <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
+
+                            <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" id="gp-column">
+            <h3>Gaussian Process Regression</h3>
+            <p>Gaussian Processes were used to forecast the latent embedding coordinates for future influenza sequences. The forecasted coordinates were passed back to the decoder portion of the VAE to provide the probability distribution over possible sequences.</p>
+
+            <button type="button" name="learn-more-gp" class="btn btn-primary" data-toggle="modal" data-target="#gpModal">Learn More</button>
+
+            <div class="modal fade" id="gpModal" tabindex="-1" role="dialog" aria-labelledby="gp-modal-title">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="gp-modal-title">Gaussian Process Regression</h3>
+                        </div>
+                        <div class="modal-body" id="modal-body-gp">
+                            <!-- <h4>Gaussian Processes (GPs)</h4> -->
+                            <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
+
+                            <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>
+
+                            <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
+
+                            <p>GPs here were implemented using <code>PyMC3</code>.</p>
+                        </div>
                     </div>
                 </div>
             </div>
