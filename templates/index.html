@@ -2,25 +2,22 @@
 
 {% block body %}
 <meta name="description" content="Simple BioJS example" />
-<script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
-{{ js_resources|indent(4)|safe }}
-{{ css_resources|indent(4)|safe }}
 
-<div class="container">
+<div class="container" width="800px">
     <div class="row" id="page-heading">
         <div class="col-md-12">
             <h1>Flu Forecaster</h1>
             <p>by <a href="https://www.linkedin.com/in/ericmjl/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
         </div>
     </div>
-    <div class="row" id="introduction-header">
+    <!-- <div class="row" id="introduction-header">
         <div class="col-md-12">
             <h2>Introduction</h2>
         </div>
-    </div>
+    </div> -->
     <div class="row" id="introduction-text-container">
         <div class="col-md-8" id="introduction-text">
-            <h3>Influenza Vaccine Development</h3>
+            <h2>Influenza Vaccine Development</h2>
             <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
 
             <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
@@ -37,79 +34,85 @@
             <p><b>Good science can help make vaccines that better match what will actually be circulating, which is good business sense, and that is the goal of this project.</b></p>
         </div>
         <div class="col-md-4">
-            {{ ve_script|safe }}
             {{ ve_div|safe }}
             <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
         </div>
     </div>
-    <div class="row" id="data-title-container">
-        <div class="col-md-12">
-            <h3>Data</h3>
-        </div>
-    </div>
     <div class="row" id="data-text-container">
         <div class="col-md-8" id="data-source-text">
+            <h2>Data</h2>
             <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
 
             <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
         </div>
         <div class="col-md-4" id="data-per-year-plot">
-            {{ nseq_script|safe }}
             {{ nseq_div|safe }}
             <p><i>Number of influenza sequences per year in the dataset used for Flu Forecaster.</i></p>
         </div>
     </div>
-    <div class="row" id="method-tabs-row">
-        <div class="col-md-6" id="tools-tabs-container">
-            <h2>Tools</h2>
+    <div class="row" id="analysis-methods-and-tools-tabs-row">
+        <div class="col-md-12" id="analysis-methods-and-tools-tabs-container">
+            <h2>Analysis Methods and Tools</h2>
             <p>Click on the navigation tabs below to view more details about the data processing and machine learning methods deployed behind this dashboard.</p>
             <!-- Navigation Tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#preprocessing" aria-controls="preprocessing" role="tab" data-toggle="tab"> Preprocessing</a></li>
-                <li role="presentation"><a href="#vae" aria-controls="vae" role="tab" data-toggle="tab">VAE</a></li>
-                <li role="presentation"><a href="#gp" aria-controls="gp" role="tab" data-toggle="tab">GP</a></li>
+                <li role="presentation" class="active"><a href="#preprocessing" aria-controls="preprocessing preprocessing-fig" role="tab" data-toggle="tab"> Preprocessing</a></li>
+                <li role="presentation"><a href="#vae" aria-controls="vae" role="tab" data-toggle="tab">Variational Autoencoders</a></li>
+                <li role="presentation"><a href="#gp" aria-controls="gp" role="tab" data-toggle="tab">Gaussian Process Regression</a></li>
             </ul>
             <!-- Content in Navigation Tabs -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade in active" id="preprocessing">
-                    <h3>Sequence Padding</h3>
-                    <p>Contrary to what might be common thought, multiple sequence alignment was not done prior to conversion to a numerical form. Rather, I first computed the maximum sequence length represented inside the set of sequences downloaded, and padded <code>*</code> (asterisk) characters on each sequence until all of them fit that length. </p>
+                    <div class="col-md-6" id="preprocessing-text">
+                        <h3>Sequence Padding</h3>
+                        <p>Contrary to what might be common thought, multiple sequence alignment was not done prior to conversion to a numerical form. Rather, I first computed the maximum sequence length represented inside the set of sequences downloaded, and padded <code>*</code> (asterisk) characters on each sequence until all of them fit that length. </p>
 
-                    <p>This done using custom Python code and the <code>BioPython</code> package.</p>
+                        <p>This done using custom Python code and the <code>BioPython</code> and <code>numpy</code> packages.</p>
 
-                    <h3>One-Hot Encoding</h3>
-                    <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
+                        <h3>One-Hot Encoding</h3>
+                        <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
 
-                    <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
+                        <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
+                    </div>
+                    <div class="col-md-6" id="preprocessing-figure">
+                        <h3>Illustration</h3>
+                        <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/preprocessing-figures.jpg" alt="" width=100%>
+                        <p><i>Padding and encoding of protein sequences, visualized.</i></p>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="vae">
-                    <h3>Variational Autoencoders (VAEs)</h3>
-                    <p>VAEs are used here to learn a "latent embedding" of the influenza protein sequence. The goal of autoencoders is to reconstruct the input as the output, while simultaneously learning a compressed "latent" representation of the original data. If I learn a 3-dimensional embedding, then each protein sequence gets three points that identify it in latent space. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences.</p>
+                    <div class="col-md-6">
+                        <h3>Variational Autoencoders (VAEs)</h3>
+                        <p>Autoencoders reconstruct the input as the output, and simultaneously learn a lower-dimensional "latent" representation of the original data. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences.</p>
 
-                    <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
+                        <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
 
-                    <p>Here, after converting the sequences to a binary encoding, I passed the binary-encoded matrix through a VAE to learn a 3D embedding, which you can visualize below.</p>
+                        <p>Here, after converting the sequences to a binary encoding, I passed the binary-encoded matrix through a VAE to learn a 3D embedding, which you can visualize below.</p>
 
-                    <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
+                        <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
 
-                    <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
-
+                        <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Figure!</h3>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="gp">
-                    <h3>Gaussian Processes (GPs)</h3>
-                    <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
+                    <div class="col-md-6">
+                        <h3>Gaussian Processes (GPs)</h3>
+                        <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
 
-                    <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>
+                        <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>
 
-                    <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
+                        <p><b>Basically</b>, GPs provide a way of quantifying the uncertainty surrounding predicted sequences.</p>
 
-                    <p>GPs here were implemented using <code>PyMC3</code>.</p>
-
+                        <p>GPs here were implemented using <code>PyMC3</code>.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Figure!</h3>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6" id="">
-
         </div>
     </div>
     <div class="row" id="predicted-sequences-container">
@@ -120,27 +123,7 @@
     </div>
     <div class="row" id="multiple-sequence-alignment-container">
         <div class="col-md-12" id="multiple-sequence-alignment">
-            <script>
-                var opts = {
-                    el: document.getElementById("multiple-sequence-alignment"),
-                    vis: {
-                      conserv: true,
-                      overviewbox: false,
-                      seqlogo: true,
-                    },
-                    colorscheme: {
-                      scheme: "clustal2"
-                    },
-                    // smaller menu for JSBin
-                    // menu: "small",
-                    bootstrapMenu: true,
-                    importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
-                };
-
-                var m = new msa.msa(opts);
-                  m.render();
-
-            </script>
+            <!-- Do not delete this set of divs. The relevant script is below to make the page load faster. -->
         </div>
     </div>
     <div class="row" id="evoluiontary-trajectory-text-container">
@@ -153,37 +136,7 @@
     </div>
     <div class="row" id="evolutionary-trajectory-plots-container">
         <div class="col-md-12" id="evolutionary-trajectory-plot">
-            {{ evo_script|indent(4)|safe }}
             {{ evo_div|indent(4)|safe }}
-        </div>
-    </div>
-    <div class="row" id="science-explanation-header-container">
-        <div class="col-md-12">
-            <h2>Science</h2>
-            <p>Here is a brief introduction to the science that powers this dashboard.</p>
-        </div>
-    </div>
-    <div class="row" id="science-explanation-text-container">
-        <div class="col-md-4" id="vaccine-background-text">
-            <h3>Vaccine Production</h3>
-            <p>In simple terms, vaccine strain production lags deployment by about 6 months. The vaccine strain that eventually makes it into the vaccines that are produced are not based on a notion of what a "future" strain will look like; rather, they simply are picked from the currently circulating strains.</p>
-        </div>
-        <div class="col-md-4" id="variational-autoencoder-text">
-            <h3>Variational Autoencoders (VAEs)</h3>
-            <p></p>
-        </div>
-        <div class="col-md-4" id="gaussian-process-text">
-            <h3>Gaussian Processes (GPs)</h3>
-            <p></p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4" id="vaccine-background-basically">
-            <p><b>Basically</b>, forecasting flu sequences may provide an avenue towards pre-emptively making better vaccines that save lives.</p>
-        </div>
-        <div class="col-md-4" id="vae-basically">
-        </div>
-        <div class="col-md-4" id="gp-basically">
         </div>
     </div>
     <div class="row" id="improvements-text-container">
@@ -207,5 +160,37 @@
         </div>
     </div>
 </div>
+<!-- JS Scripts -->
+    <!-- Multiple sequence alignment scripts -->
+    <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
+    <script>
+        var opts = {
+            el: document.getElementById("multiple-sequence-alignment"),
+            vis: {
+              conserv: true,
+              overviewbox: false,
+              seqlogo: true,
+            },
+            colorscheme: {
+              scheme: "clustal2"
+            },
+            // smaller menu for JSBin
+            // menu: "small",
+            bootstrapMenu: true,
+            importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/oneQ_predictions.fasta",
+        };
+
+        var m = new msa.msa(opts);
+          m.render();
+
+    </script>
+
+    <!-- Bokeh JS -->
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    <!-- Bokeh Plots -->
+    {{ evo_script|indent(4)|safe }}
+    {{ nseq_script|safe }}
+    {{ ve_script|safe }}
 
 {% endblock %}
