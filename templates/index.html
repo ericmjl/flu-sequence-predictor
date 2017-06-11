@@ -10,11 +10,6 @@
             <p>by <a href="https://www.linkedin.com/in/ericmjl/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
         </div>
     </div>
-    <!-- <div class="row" id="introduction-header">
-        <div class="col-md-12">
-            <h2>Introduction</h2>
-        </div>
-    </div> -->
     <div class="row" id="introduction-text-container">
         <div class="col-md-8" id="introduction-text">
             <h2>Influenza Vaccine Development</h2>
@@ -165,7 +160,7 @@
         </div>
     </div>
     <div class="row" id="evolutionary-trajectory-plots-container">
-        <div class="col-md-12" id="evolutionary-trajectory-plot">
+        <div class="col-md-12 center-block" id="evolutionary-trajectory-plot">
             {{ evo_div|indent(4)|safe }}
         </div>
     </div>
@@ -186,10 +181,11 @@
             <h3>Forecasting Validation</h3>
             <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
 
-            <p>For more information ongi the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
+            <p>For more information on the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
         </div>
     </div>
 </div>
+
 <!-- JS Scripts -->
     <!-- Multiple sequence alignment scripts -->
     <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
