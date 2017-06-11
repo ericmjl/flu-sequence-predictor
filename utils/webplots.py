@@ -1,7 +1,8 @@
 from bokeh.layouts import row
 from bokeh.plotting import figure
 from bokeh.palettes import inferno
-from bokeh.models import ColumnDataSource, Range1d
+from bokeh.models import (ColumnDataSource, Range1d, PanTool, HoverTool,
+                          ResetTool, CrosshairTool)
 from bokeh.embed import components
 from utils.data import load_sequence_and_metadata
 
@@ -12,35 +13,56 @@ def make_vaccine_effectiveness_plot():
     """
     This makes the plot that introduces vaccine effectiveness.
     """
-    tables = pd.read_html('https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm')  # noqa
-    df = tables[0]
-    df.columns = df.loc[0, :]
-    df = df.drop(0).reset_index(drop=True)
-    df.columns = ['Season', 'Reference', 'Study Sites', 'Number of Patients',
-                  'Overall VE', 'CI']
-    df['Season Start'] = df['Season'].str.split('-').str[0]\
+    # Download and preprocess data.
+    cdc_tables = pd.read_html('https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm')  # noqa
+    cdc_ve = cdc_tables[0]
+    cdc_ve.columns = cdc_ve.loc[0, :]
+    cdc_ve = cdc_ve.drop(0).reset_index(drop=True)
+    cdc_ve.columns = ['season', 'reference', 'study_sites', 'num_patients',
+                  'overall_ve', 'CI']
+    cdc_ve['season_start'] = cdc_ve['season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
 
+    # Configure Bokeh Plot
+    cdc_src = ColumnDataSource(cdc_ve)
+    hover_tool = HoverTool()
+    hover_tool.tooltips = [
+        ("Year", "@season_start"),
+        ("Effectiveness", "@overall_ve")
+    ]
+    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
+
+    # Make Bokeh Plot
     p = figure(plot_width=350, plot_height=200,
-               tools='pan,crosshair,hover, reset')
+               tools=tools)
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
     p.y_range = Range1d(0, 100)
-    p.line(x=df['Season Start'], y=df['Overall VE'])
-    p.circle(x=df['Season Start'], y=df['Overall VE'])
+    p.line(x='season_start', y='overall_ve', source=cdc_src)
+    p.circle(x='season_start', y='overall_ve', source=cdc_src)
     return components(p)
 
 
 def make_num_sequences_per_year_plot():
+    # Download and Preprocess Data
     sequences, metadata = load_sequence_and_metadata()
     metadata['Year'] = metadata['Collection Date'].apply(lambda x: x.year)
     metadata = metadata[metadata['Host Species'] == 'IRD:Human']
-    gb = metadata.groupby('Year').count()
+    gb = metadata.groupby('Year').count().reset_index()
+
+    # Configure Bokeh Plot
+    seqperyear_src = ColumnDataSource(gb)
+    hover_tool = HoverTool()
+    hover_tool.tooltips = [
+        ("Year", "@Year"),
+        ("Num. Sequences", "@Name")
+    ]
+    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
 
     p = figure(plot_width=350, plot_height=200,
-               tools='pan,crosshair,hover,reset')
-    p.line(gb['Name'].index, gb['Name'])
-    p.circle(gb['Name'].index, gb['Name'])
+               tools=tools)
+    p.line(x='Year', y='Name', source=seqperyear_src)
+    p.circle(x='Year', y='Name', source=seqperyear_src)
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Number of Sequences'
 
