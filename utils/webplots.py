@@ -21,13 +21,34 @@ def make_vaccine_effectiveness_plot():
     df['Season Start'] = df['Season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
 
-    p = figure(plot_width=350, plot_height=200, tools='pan,crosshair,reset')
+    p = figure(plot_width=350, plot_height=200,
+               tools='pan,crosshair,hover, reset')
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
     p.y_range = Range1d(0, 100)
     p.line(x=df['Season Start'], y=df['Overall VE'])
     p.circle(x=df['Season Start'], y=df['Overall VE'])
     return components(p)
+
+
+def make_num_sequences_per_year_plot():
+    sequences, metadata = load_sequence_and_metadata()
+    metadata['Year'] = metadata['Collection Date'].apply(lambda x: x.year)
+    metadata = metadata[metadata['Host Species'] == 'IRD:Human']
+    gb = metadata.groupby('Year').count()
+
+    p = figure(plot_width=350, plot_height=200,
+               tools='pan,crosshair,hover,reset')
+    p.line(gb['Name'].index, gb['Name'])
+    p.circle(gb['Name'].index, gb['Name'])
+    p.xaxis.axis_label = 'Year'
+    p.yaxis.axis_label = 'Number of Sequences'
+
+    meta = dict()
+    meta['n_seqs'] = len(metadata)
+    meta['min_year'] = min(metadata['Year'])
+    meta['max_year'] = max(metadata['Year'])
+    return components(p), meta
 
 
 def make_coordinate_scatterplot(coords, src):
@@ -45,25 +66,6 @@ def make_coordinate_scatterplot(coords, src):
     p.yaxis.axis_label = 'Dimension {0}'.format(cy)
 
     return p
-
-
-def make_num_sequences_per_year_plot():
-    sequences, metadata = load_sequence_and_metadata()
-    metadata['Year'] = metadata['Collection Date'].apply(lambda x: x.year)
-    metadata = metadata[metadata['Host Species'] == 'IRD:Human']
-    gb = metadata.groupby('Year').count()
-
-    p = figure(plot_width=350, plot_height=200, tools='pan,crosshair,reset')
-    p.line(gb['Name'].index, gb['Name'])
-    p.circle(gb['Name'].index, gb['Name'])
-    p.xaxis.axis_label = 'Year'
-    p.yaxis.axis_label = 'Number of Sequences'
-
-    meta = dict()
-    meta['n_seqs'] = len(metadata)
-    meta['min_year'] = min(metadata['Year'])
-    meta['max_year'] = max(metadata['Year'])
-    return components(p), meta
 
 
 def make_coord_plots():
