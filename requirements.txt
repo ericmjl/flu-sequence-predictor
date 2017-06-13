@@ -12,3 +12,4 @@ lxml==3.8.0
 beautifulsoup4==4.6.0
 html5lib==0.999999999
 scipy==0.19.0
+feather-format==0.4.0
