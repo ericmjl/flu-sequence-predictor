@@ -10,7 +10,7 @@ logger = logging.getLogger('werkzeug')
 logger.setLevel(logging.DEBUG)
 
 app = Flask(__name__)
-app.config['LOGGER_NAME'] = 'appLogger'
+# app.config['LOGGER_NAME'] = 'werkzeug'
 
 
 @app.route('/')
