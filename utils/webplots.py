@@ -8,6 +8,10 @@ from utils.data import load_sequence_and_metadata, load_prediction_coordinates
 from scipy.spatial import ConvexHull
 
 import pandas as pd
+import logging
+
+logger = logging.getLogger('werkzeug')
+logger.setLevel(logging.DEBUG)
 
 
 def make_vaccine_effectiveness_plot():
@@ -15,6 +19,7 @@ def make_vaccine_effectiveness_plot():
     This makes the plot that introduces vaccine effectiveness.
     """
     # Download and preprocess data.
+    logger.debug('started making vaccine effectiveness plot.')
     cdc_tables = pd.read_html('https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm')  # noqa
     cdc_ve = cdc_tables[0]
     cdc_ve.columns = cdc_ve.loc[0, :]
@@ -23,6 +28,7 @@ def make_vaccine_effectiveness_plot():
                   'overall_ve', 'CI']
     cdc_ve['season_start'] = cdc_ve['season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
+    logger.debug('downloaded and preprocessed vaccine effectiveness data.')
 
     # Configure Bokeh Plot
     cdc_src = ColumnDataSource(cdc_ve)
@@ -41,6 +47,7 @@ def make_vaccine_effectiveness_plot():
     p.y_range = Range1d(0, 100)
     p.line(x='season_start', y='overall_ve', source=cdc_src)
     p.circle(x='season_start', y='overall_ve', source=cdc_src)
+    logger.debug('made bokeh plot')
     return components(p)
 
 
@@ -50,6 +57,7 @@ def make_num_sequences_per_year_plot():
     metadata['Year'] = metadata['Collection Date'].apply(lambda x: x.year)
     metadata = metadata[metadata['Host Species'] == 'IRD:Human']
     gb = metadata.groupby('Year').count().reset_index()
+    logger.debug('loaded and preprocessed sequences per year plot data')
 
     # Configure Bokeh Plot
     seqperyear_src = ColumnDataSource(gb)
@@ -71,17 +79,16 @@ def make_num_sequences_per_year_plot():
     meta['n_seqs'] = len(metadata)
     meta['min_year'] = min(metadata['Year'])
     meta['max_year'] = max(metadata['Year'])
+    logger.debug('finished bokeh plot.')
     return components(p), meta
 
 
-def make_coordinate_scatterplot(coords, src):
+def make_coordinate_scatterplot(coords, src, predcoords):
     """
     This makes one embedding coordinate scatter plot.
     """
     cx, cy = coords
     assert cx != cy
-
-    predcoords = load_prediction_coordinates()
 
     p = figure(webgl=True, plot_height=300, plot_width=300,
                tools='pan,box_select,box_zoom,reset')
@@ -90,6 +97,7 @@ def make_coordinate_scatterplot(coords, src):
               color='palette', source=src)
     dim1 = 'coords{0}'.format(cx)
     dim2 = 'coords{0}'.format(cy)
+
     for (mpl_color, hex_color), dat in \
             predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
         d = dat[[dim1, dim2]]
@@ -119,10 +127,12 @@ def make_coord_plots():
 
     src = ColumnDataSource(data)
 
-    p1 = make_coordinate_scatterplot([0, 1], src)
-    p2 = make_coordinate_scatterplot([1, 2], src)
+    predcoords = load_prediction_coordinates()
+
+    p1 = make_coordinate_scatterplot([0, 1], src, predcoords)
+    p2 = make_coordinate_scatterplot([1, 2], src, predcoords)
     p2.x_range = p1.y_range
-    p3 = make_coordinate_scatterplot([0, 2], src)
+    p3 = make_coordinate_scatterplot([0, 2], src, predcoords)
     p3.x_range = p1.x_range
     p3.y_range = p2.y_range
 

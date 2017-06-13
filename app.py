@@ -3,8 +3,14 @@ from utils.webplots import (make_vaccine_effectiveness_plot,
                             make_num_sequences_per_year_plot, make_coord_plots)
 from flask import Flask, render_template
 from bokeh.resources import INLINE
+import logging
+from logging.handlers import RotatingFileHandler
+
+logger = logging.getLogger('werkzeug')
+logger.setLevel(logging.DEBUG)
 
 app = Flask(__name__)
+app.config['LOGGER_NAME'] = 'appLogger'
 
 
 @app.route('/')
