@@ -4,7 +4,8 @@ from bokeh.palettes import inferno
 from bokeh.models import (ColumnDataSource, Range1d, PanTool, HoverTool,
                           ResetTool, CrosshairTool)
 from bokeh.embed import components
-from utils.data import load_sequence_and_metadata
+from utils.data import load_sequence_and_metadata, load_prediction_coordinates
+from scipy.spatial import ConvexHull
 
 import pandas as pd
 
@@ -78,11 +79,27 @@ def make_coordinate_scatterplot(coords, src):
     This makes one embedding coordinate scatter plot.
     """
     cx, cy = coords
+    assert cx != cy
+
+    predcoords = load_prediction_coordinates()
+
     p = figure(webgl=True, plot_height=300, plot_width=300,
-               tools='pan,box_select,reset')
+               tools='pan,box_select,box_zoom,reset')
     p.scatter(x='coords{0}'.format(cx),
               y='coords{0}'.format(cy),
               color='palette', source=src)
+    dim1 = 'coords{0}'.format(cx)
+    dim2 = 'coords{0}'.format(cy)
+    for (mpl_color, hex_color), dat in \
+            predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
+        d = dat[[dim1, dim2]]
+        if len(d) >=10:
+            hull = ConvexHull(d[[dim1, dim2]])
+            for simplex in hull.simplices:
+                p.circle(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
+                         fill_color=hex_color)
+                p.line(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
+                       line_color=hex_color)
 
     p.xaxis.axis_label = 'Dimension {0}'.format(cx + 1)
     p.yaxis.axis_label = 'Dimension {0}'.format(cy + 1)
