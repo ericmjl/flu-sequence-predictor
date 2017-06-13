@@ -9,7 +9,7 @@
                 <p>by <a href="https://www.linkedin.com/in/ericmjl/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
             </div>
         </div>
-        <div class="row" id="introduction-text-container">
+        <div class="row" id="introduction-text-row">
             <div class="col-md-8" id="introduction-text">
                 <h2>Influenza Vaccine Development</h2>
                 <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
@@ -21,7 +21,7 @@
                 <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
             </div>
         </div>
-        <div class="row" id="introduction-text-container-2">
+        <div class="row" id="introduction-text-row-2">
             <div class="col-md-8" id="">
                 <p>There is a lost business opportunity here, as studies by the CDC are showing that <a href="https://www.cdc.gov/mmwr/volumes/66/wr/mm6606a3.htm?s_cid=mm6606a3_w">the 2017 vaccine efficacy is below 50%</a> on most years, with some years dropping to below 20% efficacy. Sustained lack of efficacy may result in a lack of public confidence in vaccination. The most immediate impact would be a contraction in the market for vaccines, followed by adverse impacts for public health. With a <a href="http://www.cnbc.com/2015/10/19/the-16-billion-business-of-flu.html">USD 4 billion dollars market size globally</a>, vaccine manufacturers cannot afford for public confidence to be eroded.</p>
 
@@ -32,7 +32,7 @@
                 <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
             </div>
         </div>
-        <div class="row" id="data-text-container">
+        <div class="row" id="data-text-row">
             <div class="col-md-8" id="data-source-text">
                 <h2>Data</h2>
                 <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
@@ -47,7 +47,9 @@
         <div class="row" id="analysis-methods-and-tools-header-row">
             <div class="col-md-12" id="analysis-methods-and-tools-header-container">
                 <h2>Analysis Methods and Tools</h2>
-                <p>Click on the navigation tabs below to view more details about the data processing and machine learning methods deployed behind this dashboard.</p>
+                <p>The key challenge here is finding a representation of "sequences" for which there is a natural notion of "momentum" and "forward" steps. To do this, we use a combination of <b>discretized</b> inputs, variational autoencoders, and gaussian process (GP) regression.</p>
+
+                <p>Click on the buttons below to view more details about the data processing and machine learning methods used.</p>
             </div>
         </div>
         <div class="row" id="analysis-methods-and-tools-text-row">
@@ -139,18 +141,18 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="predicted-sequences-container">
+        <div class="row" id="predicted-sequences-row">
             <div class="col-md-12">
                 <h2>Predicted Sequences</h2>
                 <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
             </div>
         </div>
-        <div class="row" id="multiple-sequence-alignment-container">
+        <div class="row" id="multiple-sequence-alignment-row">
             <div class="col-md-12" id="multiple-sequence-alignment">
                 <!-- Do not delete this set of divs. The relevant script is below to make the page load faster. -->
             </div>
         </div>
-        <div class="row" id="evoluiontary-trajectory-text-container">
+        <div class="row" id="evoluiontary-trajectory-text-row">
             <div class="col-md-12" id="evolutionary-trajectory-text">
                 <h2>Evolutionary Trajectory</h2>
                 <p>
@@ -158,18 +160,18 @@
                 </p>
             </div>
         </div>
-        <div class="row" id="evolutionary-trajectory-plots-container">
+        <div class="row" id="evolutionary-trajectory-plots-row">
             <div class="col-md-12 center-block" id="evolutionary-trajectory-plot">
                 {{ evo_div|indent(4)|safe }}
             </div>
         </div>
-        <div class="row" id="improvements-text-container">
+        <div class="row" id="improvements-text-row">
             <div class="col-md-12">
                 <h2>Improvements</h2>
                 <p>Data-driven science is never really done. Here's how I think this project can be taken to the next level.</p>
             </div>
         </div>
-        <div class="row" id="improvements-explanation-container">
+        <div class="row" id="improvements-explanation-row">
             <div class="col-md-4" id="gp-training-text">
                 <h3>GP Training</h3>
                 <p>Right now, we are making predictions on the forecasted sequences one quarter out, and are only predicting the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>

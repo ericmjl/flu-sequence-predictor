@@ -84,8 +84,8 @@ def make_coordinate_scatterplot(coords, src):
               y='coords{0}'.format(cy),
               color='palette', source=src)
 
-    p.xaxis.axis_label = 'Dimension {0}'.format(cx)
-    p.yaxis.axis_label = 'Dimension {0}'.format(cy)
+    p.xaxis.axis_label = 'Dimension {0}'.format(cx + 1)
+    p.yaxis.axis_label = 'Dimension {0}'.format(cy + 1)
 
     return p
 
