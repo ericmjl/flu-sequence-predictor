@@ -38,7 +38,7 @@
         <div class="row" id="data-text-row">
             <div class="col-md-8" id="data-source-text">
                 <h2>Data</h2>
-                <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
+                <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. Each virus that is sequenced is geographically- and time-stamped. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
 
                 <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
             </div>
@@ -179,9 +179,12 @@
         <div class="row" id="evoluiontary-trajectory-text-row">
             <div class="col-md-12" id="evolutionary-trajectory-text">
                 <h2>Evolutionary Trajectory</h2>
-                <p>
-                    Using a variational autoencoder, we can visualize the evolutionary trajectory of viral proteins in lower dimensions. Each point in the scatterplot below is a representation of the "average" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier, and light colours are later.
-                </p>
+                <p>Read on to see how to interpret the scatter plots below.</p>
+                <h3>Time-varying Evolution</h3>
+                <p>Using a variational autoencoder, we can visualize the evolutionary trajectory of viral proteins in lower dimensions. In Flu Forecaster, I have chosen to visualize them in 3 dimensions. Because 3D visualizations are difficult in the browser, I have decomposed the plots to show pairs of dimensions at a time.</p>
+                <p>Each point in the scatterplot below is a representation of the "average" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+                <h3>Forecasted Sequences</h3>
+                <p>Forecasted sequences are visualized using <b>bounding boxes</b>. In 3D space, each unique sequence takes up a "volume". The uncertainty in the forecasts are thus represented by the <b>probability distribution over possible discrete sequences</b>. In other words, we don't forecast one sequence, but a set of sequences.</p>
             </div>
         </div>
         <div class="row" id="evolutionary-trajectory-plots-row">
