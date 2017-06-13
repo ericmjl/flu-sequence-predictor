@@ -1,9 +1,10 @@
 from Bio import SeqIO
 import pandas as pd
 import logging
+from datetime import datetime
 
 
-logger = logging.getLogger('werkzeug')
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
@@ -12,12 +13,13 @@ def load_sequence_and_metadata():
     Returns the sequences as a list of SeqRecords, and metadata as a pandas
     DataFrame.
     """
-    logger.debug('started load_sequence_and_metadata()')
+    starttime = datetime.now()
     sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta',
                                         'fasta')]
-    metadata = pd.read_csv('data/20170531-H3N2-global.tsv', sep='\t',
-                           parse_dates=['Collection Date'])
-    logger.debug('finished load_sequence_and_metadata()')
+    metadata = pd.read_feather('data/20170531-H3N2-global.feather')
+    endtime = datetime.now()
+    elapsed = endtime - starttime
+    print(f'load_sequence_and_metadata() took {elapsed} seconds.')
     return sequences, metadata
 
 

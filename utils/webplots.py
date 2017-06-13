@@ -9,9 +9,8 @@ from scipy.spatial import ConvexHull
 
 import pandas as pd
 import logging
+from datetime import datetime
 
-logger = logging.getLogger('werkzeug')
-logger.setLevel(logging.DEBUG)
 
 
 def make_vaccine_effectiveness_plot():
@@ -19,7 +18,7 @@ def make_vaccine_effectiveness_plot():
     This makes the plot that introduces vaccine effectiveness.
     """
     # Download and preprocess data.
-    logger.debug('started making vaccine effectiveness plot.')
+    starttime = datetime.now()
     cdc_tables = pd.read_html('https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm')  # noqa
     cdc_ve = cdc_tables[0]
     cdc_ve.columns = cdc_ve.loc[0, :]
@@ -28,7 +27,7 @@ def make_vaccine_effectiveness_plot():
                   'overall_ve', 'CI']
     cdc_ve['season_start'] = cdc_ve['season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
-    logger.debug('downloaded and preprocessed vaccine effectiveness data.')
+    # print('downloaded and preprocessed vaccine effectiveness data.')
 
     # Configure Bokeh Plot
     cdc_src = ColumnDataSource(cdc_ve)
@@ -47,17 +46,19 @@ def make_vaccine_effectiveness_plot():
     p.y_range = Range1d(0, 100)
     p.line(x='season_start', y='overall_ve', source=cdc_src)
     p.circle(x='season_start', y='overall_ve', source=cdc_src)
-    logger.debug('made bokeh plot')
+    endtime = datetime.now()
+    elapsed = endtime - starttime
+    print(f'make_vaccine_effectiveness_plot() took {elapsed} seconds')
     return components(p)
 
 
 def make_num_sequences_per_year_plot():
+    starttime = datetime.now()
     # Download and Preprocess Data
     sequences, metadata = load_sequence_and_metadata()
     metadata['Year'] = metadata['Collection Date'].apply(lambda x: x.year)
     metadata = metadata[metadata['Host Species'] == 'IRD:Human']
     gb = metadata.groupby('Year').count().reset_index()
-    logger.debug('loaded and preprocessed sequences per year plot data')
 
     # Configure Bokeh Plot
     seqperyear_src = ColumnDataSource(gb)
@@ -79,7 +80,9 @@ def make_num_sequences_per_year_plot():
     meta['n_seqs'] = len(metadata)
     meta['min_year'] = min(metadata['Year'])
     meta['max_year'] = max(metadata['Year'])
-    logger.debug('finished bokeh plot.')
+    endtime = datetime.now()
+    elapsed = endtime - starttime
+    print(f'make_num_sequences_per_year_plot() took {elapsed} seconds.')
     return components(p), meta
 
 
@@ -87,6 +90,7 @@ def make_coordinate_scatterplot(coords, src, predcoords):
     """
     This makes one embedding coordinate scatter plot.
     """
+    starttime = datetime.now()
     cx, cy = coords
     assert cx != cy
 
@@ -98,20 +102,41 @@ def make_coordinate_scatterplot(coords, src, predcoords):
     dim1 = 'coords{0}'.format(cx)
     dim2 = 'coords{0}'.format(cy)
 
-    for (mpl_color, hex_color), dat in \
-            predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
+    xs_all = []
+    ys_all = []
+    colors = []
+    for (mpl_color, hex_color), dat in predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
         d = dat[[dim1, dim2]]
+
         if len(d) >=10:
+            xs = []
+            ys = []
             hull = ConvexHull(d[[dim1, dim2]])
-            for simplex in hull.simplices:
-                p.circle(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
-                         fill_color=hex_color)
-                p.line(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
-                       line_color=hex_color)
+            for v in hull.vertices:
+                xs.append(d.iloc[v][dim1])
+                ys.append(d.iloc[v][dim2])
+            xs.append(xs[0])
+            ys.append(ys[0])
+            xs_all.append(xs)
+            ys_all.append(ys)
+            colors.append(hex_color)
+    p.multi_line(xs_all, ys_all, color=colors)
+    # for (mpl_color, hex_color), dat in \
+    #         predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
+    #     d = dat[[dim1, dim2]]
+    #     if len(d) >=10:
+    #         hull = ConvexHull(d[[dim1, dim2]])
+    #         for simplex in hull.simplices:
+    #             p.circle(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
+    #                      fill_color=hex_color)
+    #             p.line(d.iloc[simplex][dim1], d.iloc[simplex][dim2],
+    #                    line_color=hex_color)
 
     p.xaxis.axis_label = 'Dimension {0}'.format(cx + 1)
     p.yaxis.axis_label = 'Dimension {0}'.format(cy + 1)
-
+    endtime = datetime.now()
+    elapsed = endtime - starttime
+    print(f'make_coordinate_scatterplot() took {elapsed} seconds.')
     return p
 
 
