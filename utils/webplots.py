@@ -102,14 +102,16 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     p.scatter(x='coords{0}'.format(cx),
               y='coords{0}'.format(cy),
               color='palette', source=src,
+              size=10, line_color='black', line_width=2,
               name='avg')
 
     # Plot the vaccine strains.
     p.square(x='coords{0}'.format(cx),
              y='coords{0}'.format(cy),
              color='blue',
-             line_color="black",
+             line_color="black", line_width=2,
              name="vacc",
+             size=10,
              source=vacc_src)
 
     # Add the hover tool for only the vaccine plot (name="vacc")
@@ -117,6 +119,7 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     hover_vacc.tooltips = [("Vaccine, Years Deployed", "@years_deployed"),]
     p.add_tools(hover_vacc)
 
+    # Add the hover tool for just the "average" sequences (name="avg")
     hover_avg = HoverTool(names=['avg'])
     hover_avg.tooltips=[("Average Sequence, Year", "@year")]
     p.add_tools(hover_avg)
@@ -162,6 +165,7 @@ def make_coord_plots():
                        index_col=0, parse_dates=['Collection Date'])
 
     data['year'] = data['Collection Date'].apply(lambda x: x.year)
+    data['Strain Name'] = data['Strain Name'].str.split('(').str[0]
 
     # Filter out just vaccine strains.
     with open('data/vaccine_strains.yaml', 'r+') as f:
