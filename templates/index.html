@@ -25,12 +25,12 @@
             </div>
         </div>
         <div class="row" id="problem-text-row-2">
-            <div class="col-md-8" id="">
+            <div class="col-md-8" id="problem-text-business-opportunity">
                 <p>There is a lost business opportunity here, as studies by the CDC are showing that <a href="https://www.cdc.gov/mmwr/volumes/66/wr/mm6606a3.htm?s_cid=mm6606a3_w">the 2017 vaccine efficacy is below 50%</a> on most years, with some years dropping to below 20% efficacy. Sustained lack of efficacy may result in a lack of public confidence in vaccination. The most immediate impact would be a contraction in the market for vaccines, followed by adverse impacts for public health. With a <a href="http://www.cnbc.com/2015/10/19/the-16-billion-business-of-flu.html">USD 4 billion dollars market size globally</a>, vaccine manufacturers cannot afford for public confidence to be eroded.</p>
 
                 <p><b>Good science can help make vaccines that better match what will actually be circulating, which is good business sense, and that is the goal of this project.</b></p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="vaccine-effectiveness-plot">
                 {{ ve_div|safe }}
 
                 <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
@@ -156,7 +156,7 @@
         <div class="row" id="predicted-sequences-row">
             <div class="col-md-12">
                 <h2>Predicted Sequences</h2>
-                <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
+                <p>`Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
             </div>
         </div>
         <div class="row" id="multiple-sequence-alignment-row">
@@ -193,13 +193,13 @@
             </div>
         </div>
         <div class="row" id="improvements-explanation-row">
-            <div class="col-md-4" id="gp-training-text">
+            <div class="col-md-6" id="gp-training-text">
                 <h3>Forecasting</h3>
                 <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>
 
                 <p>Apart from this, the GP coordinate dimensions are trained independently. It would be better to train the GP on all 3 dimensions jointly. However, this would also require greater compute resources.</p>
             </div>
-            <div class="col-md-4" id="forecasting-validation">
+            <div class="col-md-6" id="forecasting-validation">
                 <h3>Forecasting Validation</h3>
                 <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
 
