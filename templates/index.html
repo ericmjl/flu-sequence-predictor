@@ -12,8 +12,8 @@
                 <p>In this project, I combine the use of variational autoencoders and gaussian process regression to forecast what influenza protein sequences will look like six months ahead.</p>
             </div>
         </div>
-        <div class="row" id="introduction-text-row">
-            <div class="col-md-8" id="introduction-text">
+        <div class="row" id="problem-text-row">
+            <div class="col-md-8" id="problem-text">
                 <h2>Problem</h2>
                 <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
 
@@ -24,7 +24,7 @@
                 <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
             </div>
         </div>
-        <div class="row" id="introduction-text-row-2">
+        <div class="row" id="problem-text-row-2">
             <div class="col-md-8" id="">
                 <p>There is a lost business opportunity here, as studies by the CDC are showing that <a href="https://www.cdc.gov/mmwr/volumes/66/wr/mm6606a3.htm?s_cid=mm6606a3_w">the 2017 vaccine efficacy is below 50%</a> on most years, with some years dropping to below 20% efficacy. Sustained lack of efficacy may result in a lack of public confidence in vaccination. The most immediate impact would be a contraction in the market for vaccines, followed by adverse impacts for public health. With a <a href="http://www.cnbc.com/2015/10/19/the-16-billion-business-of-flu.html">USD 4 billion dollars market size globally</a>, vaccine manufacturers cannot afford for public confidence to be eroded.</p>
 
@@ -32,6 +32,7 @@
             </div>
             <div class="col-md-4">
                 {{ ve_div|safe }}
+
                 <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
             </div>
         </div>
@@ -99,6 +100,8 @@
                             </div>
                             <div class="modal-body" id="modal-body-timeseries">
                                 <p>In time series analysis, data cannot be held out at random. This is because there's potentially "autocorrelation structure" in time-series data - the value of a data point at time "x" may depend on the value of a data point at time "x-1".</p>
+
+                                <p>For the sake of computational efficiency, I first downsampled sequences to their <b>mean sequence per quarter</b>, and performed time-series regression on this downsampled dataset. Improvements to this are addressed below the evolutionary trajectory plots.</p>
 
                                 <p>Here, I held out the last two calendar quarters of data, corresponding to data from the first two quarters of the year 2017.</p>
 
@@ -232,7 +235,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <!-- JS Scripts -->
