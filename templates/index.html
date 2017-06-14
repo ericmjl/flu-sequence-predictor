@@ -55,9 +55,9 @@
             </div>
         </div>
         <div class="row" id="analysis-methods-and-tools-text-row">
-            <div class="col-md-3" id="preprocessing-column">
+            <div class="col-md-4" id="preprocessing-column">
                 <h3>Data Preprocessing</h3>
-                <p>Sequences were padded with <code>*</code> (asterisk) characters to the maximal length. They were then one-hot-encoded at each position, yielding a sparse binary matrix representation of each protein's amino acid sequence.</p>
+                <p>Sequences were padded with <code>*</code> (asterisk) characters to the maximal length. They were then one-hot-encoded at each position, yielding a sparse binary matrix representation of each protein's amino acid sequence. Of the 18 years of data used, 17 years (2000-2016) were part of the training set, and the final year (2017) was held out for forecasting validation.</p>
 
                 <button type="button" name="learn-more-preprocessing" class="btn btn-primary" data-toggle="modal" data-target="#preprocessingModal">Learn More</button>
 
@@ -95,25 +95,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" id="timeseries-column">
-                <h3>Time Series Analysis</h3>
-                <p>Data from the year 2000-2017 were collected. For validation purposes, I held out data from the year 2017, and trained a Variational Autoencoder and Gaussian Process model on data from the years 2000-2016.</p>
-
-                <button type="button" name="learn-more-timeseries" class="btn btn-primary" data-toggle="modal" data-target="#timeseriesModal">Learn More</button>
-                <div class="modal fade" id="timeseriesModal" tabindex="-1" role="dialog" aria-labelledby="timeseries-modal-title">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 class="modal-title">Time Series Analysis</h3>
-                            </div>
-                            <div class="modal-body" id="modal-body-timeseries">
-                                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/time-series-icon-sm.jpg" alt="" width="300px">
-                            </div>
-                        </div>
-                    </div>
-                </div>            </div>
-            <div class="col-md-3" id="vae-column">
+            <div class="col-md-4" id="vae-column">
                 <h3>Variational Autoencoders</h3>
                 <p>VAEs were used to learn a continuous latent embedding/representation of the binary encoded protein sequence on which a Gaussian Process regression model could be used for forecasting.</p>
 
@@ -142,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3" id="gp-column">
+            <div class="col-md-4" id="gp-column">
                 <h3>Gaussian Process Regression</h3>
                 <p>Gaussian Processes were used to forecast the latent embedding coordinates for future influenza sequences. The forecasted coordinates were passed back to the decoder portion of the VAE to provide the probability distribution over possible sequences.</p>
 
