@@ -23,7 +23,7 @@ def home():
     js_resources = INLINE.render_js()
     css_resources = INLINE.render_css()
 
-    seqs = [s for s in SeqIO.parse('data/oneQ_predictions.fasta', 'fasta')]
+    seqs = [s for s in SeqIO.parse('data/twoQ_predictions.fasta', 'fasta')]
     n_seqs = len(seqs)
 
     return render_template('index.html', js_resources=js_resources,

@@ -109,7 +109,7 @@
                                 <h3 class="modal-title" id="vae-modal-title">Variational Autoencoders</h3>
                             </div>
                             <div class="modal-body" id="modal-body-vae">
-                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vae-icon-sm.jpg" alt="" width="200px">
+                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vae-icon.jpg" alt="" width="200px">
                                 <p>Autoencoders reconstruct the input as the output, and simultaneously learn a lower-dimensional "latent" representation of the original data. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences. The encoder portion of the network compresses the data to the latent embedding, and the decoder network reconstructs sequences from latent embedding coordinates.</p>
 
                                 <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
