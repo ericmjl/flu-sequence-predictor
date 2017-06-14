@@ -176,13 +176,19 @@
                 <!-- Do not delete this set of divs. The relevant script is below to make the page load faster. -->
             </div>
         </div>
-        <div class="row" id="evoluiontary-trajectory-text-row">
+        <div class="row" id="evoluiontary-trajectory-title-row">
             <div class="col-md-12" id="evolutionary-trajectory-text">
                 <h2>Evolutionary Trajectory</h2>
                 <p>Read on to see how to interpret the scatter plots below.</p>
+            </div>
+        </div>
+        <div class="row" id="evolutionary-trajectory-text-row">
+            <div class="col-md-6" id="time-varying-evolution-text">
                 <h3>Time-varying Evolution</h3>
                 <p>Using a variational autoencoder, we can visualize the evolutionary trajectory of viral proteins in lower dimensions. In Flu Forecaster, I have chosen to visualize them in 3 dimensions. Because 3D visualizations are difficult in the browser, I have decomposed the plots to show pairs of dimensions at a time.</p>
                 <p>Each point in the scatterplot below is a representation of the "average" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+            </div>
+            <div class="col-md-6" id="forecasted-sequences-text">
                 <h3>Forecasted Sequences</h3>
                 <p>Forecasted sequences are visualized using <b>bounding boxes</b>. Each bounding box represents one sequence, and they are coloured differently. In 3D space, each unique sequence takes up a "volume"; sequences with larger "volumes" (or areas in the 2D projection) have larger forecasted probability of showing up. The uncertainty in the forecasts are thus represented by the <b>probability distribution over possible discrete sequences</b>. In other words, we don't forecast one sequence, but a set of sequences.</p>
             </div>
