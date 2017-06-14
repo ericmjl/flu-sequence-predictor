@@ -34,7 +34,7 @@ def make_vaccine_effectiveness_plot():
     hover_tool = HoverTool()
     hover_tool.tooltips = [
         ("Year", "@season_start"),
-        ("Effectiveness", "@overall_ve")
+        ("Effectiveness (%)", "@overall_ve")
     ]
     tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
 
