@@ -52,9 +52,6 @@
             <div class="col-md-12" id="analysis-methods-and-tools-header-container">
                 <h2>Analysis Methods and Tools</h2>
                 <img src="https://github.com/ericmjl/flu-sequence-predictor/raw/master/images/overview-figure-sm.jpg" alt="" width="100%">
-                <p></p>
-
-                <p>Click on the buttons below to view more details about the data processing and machine learning methods used.</p>
             </div>
         </div>
         <div class="row" id="analysis-methods-and-tools-text-row">
@@ -100,6 +97,7 @@
                                 <h3 class="modal-title">Time Series Analysis</h3>
                             </div>
                             <div class="modal-body" id="modal-body-timeseries">
+                                <img src="" alt="">
                                 <p>In time series analysis, data cannot be held out at random. This is because there's potentially "autocorrelation structure" in time-series data - the value of a data point at time "x" may depend on the value of a data point at time "x-1".</p>
 
                                 <p>For the sake of computational efficiency, I first downsampled sequences to their <b>mean sequence per quarter</b>, and performed time-series regression on this downsampled dataset. Improvements to this are addressed below the evolutionary trajectory plots.</p>
