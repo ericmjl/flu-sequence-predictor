@@ -20,7 +20,7 @@
                 <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
             </div>
             <div class="col-md-4" id="fig-vaccine">
-                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production.jpg" alt="Vaccine production lag time." width="350px">
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production-sm.jpg" alt="Vaccine production lag time." width="350px">
                 <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
             </div>
         </div>
@@ -71,7 +71,7 @@
                                 <h3 class="modal-title" id="preprocessing-modal-title"> Data Preprocessing</h3>
                             </div>
                             <div class="modal-body" id="modal-body-preprocessing">
-                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/preprocessing-figures.jpg" alt="" width=80%>
+                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/preprocessing-figures-sm.jpg" alt="" width=80%>
                                 <h4>Sequence Padding</h4>
                                 <p>Contrary to what might be common thought, multiple sequence alignment was not done prior to conversion to a numerical form. Rather, I first computed the maximum sequence length represented inside the set of sequences downloaded, and padded <code>*</code> (asterisk) characters on each sequence until all of them fit that length. </p>
 
@@ -124,7 +124,7 @@
                                 <h3 class="modal-title" id="vae-modal-title">Variational Autoencoders</h3>
                             </div>
                             <div class="modal-body" id="modal-body-vae">
-                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vae-icon.jpg" alt="" width="200px">
+                                <img class="img-responsive center-block" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vae-icon-sm.jpg" alt="" width="200px">
                                 <p>Autoencoders reconstruct the input as the output, and simultaneously learn a lower-dimensional "latent" representation of the original data. With sequences, this has the advantage of converting a "discrete" input into a "continuous" one; with continuous representations, we have a wealth of regression methods that can be used that would not otherwise be available using protein sequences. The encoder portion of the network compresses the data to the latent embedding, and the decoder network reconstructs sequences from latent embedding coordinates.</p>
 
                                 <p>"Variational" autoencoders learn not just the "point estimate" in "latent embedding space", but also the probability distribution in "latent embedding space" that corresponds to a particular sequence. This means that we can also sample new sequences out of the latent space, and generate new, unseen sequences. This gives us hope for forecasting what new sequences will look like.</p>
@@ -154,7 +154,7 @@
                             </div>
                             <div class="modal-body" id="modal-body-gp">
                                 <!-- <h4>Gaussian Processes (GPs)</h4> -->
-                                <img class="img-responsive center-block" width="300px" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/gp-icon.jpg" alt="">
+                                <img class="img-responsive center-block" width="300px" src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/gp-icon-sm.jpg" alt="">
                                 <p>Gaussian Processes are a "lazy" and Bayesian machine learning method well suited to learning non-linear functions of data. The basic idea behind GPs is as such: given a set of data points sampled from a non-linear function, it will return a probability distribution over the possible functions that fit the dataset. GPs are called "lazy" because they assume that points nearby one another on one axis will be nearby one another on the other axis.</p>
 
                                 <p>In time-series land, GPs are particularly useful because time-series data may be varying in a non-linear fashion with time (think stock markets), and they are able to provide quantified estimates of <b>uncertainty</b> in predictions (because they're Bayesian - Go Bayes!).</p>

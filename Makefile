@@ -12,4 +12,4 @@ images/%.jpg: images/%.pdf Makefile
 
 # Make small JPG versions of images
 images/%-sm.jpg: images/%.pdf Makefile
-	convert -density 100 $< -quality 100 $@
+	convert -density 200 $< -quality 100 $@
