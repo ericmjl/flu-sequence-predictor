@@ -79,6 +79,17 @@
                                 <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
 
                                 <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
+
+                                <h4>Validation Set</h4>
+
+                                <p>In time series analysis, data cannot be held out at random. This is because there's potentially "autocorrelation structure" in time-series data - the value of a data point at time "x" may depend on the value of a data point at time "x-1".</p>
+
+                                <p>For the sake of computational efficiency, I first downsampled sequences to their <b>mean sequence per quarter</b>, and performed time-series regression on this downsampled dataset. Improvements to this are addressed below the evolutionary trajectory plots.</p>
+
+                                <p>Here, I held out the last two calendar quarters of data, corresponding to data from the first two quarters of the year 2017.</p>
+
+                                <p>This done using custom Python code and the <code>pandas</code> package.</p>
+
                             </div>
                         </div>
                     </div>
@@ -97,14 +108,7 @@
                                 <h3 class="modal-title">Time Series Analysis</h3>
                             </div>
                             <div class="modal-body" id="modal-body-timeseries">
-                                <img src="" alt="">
-                                <p>In time series analysis, data cannot be held out at random. This is because there's potentially "autocorrelation structure" in time-series data - the value of a data point at time "x" may depend on the value of a data point at time "x-1".</p>
-
-                                <p>For the sake of computational efficiency, I first downsampled sequences to their <b>mean sequence per quarter</b>, and performed time-series regression on this downsampled dataset. Improvements to this are addressed below the evolutionary trajectory plots.</p>
-
-                                <p>Here, I held out the last two calendar quarters of data, corresponding to data from the first two quarters of the year 2017.</p>
-
-                                <p>This done using custom Python code and the <code>pandas</code> package.</p>
+                                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/time-series-icon-sm.jpg" alt="" width="300px">
                             </div>
                         </div>
                     </div>
