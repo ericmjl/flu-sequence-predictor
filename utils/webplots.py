@@ -8,10 +8,8 @@ from utils.data import load_sequence_and_metadata, load_prediction_coordinates
 from scipy.spatial import ConvexHull
 from collections import defaultdict
 import pandas as pd
-import logging
 from datetime import datetime
 import yaml
-
 
 
 def make_vaccine_effectiveness_plot():
@@ -25,7 +23,7 @@ def make_vaccine_effectiveness_plot():
     cdc_ve.columns = cdc_ve.loc[0, :]
     cdc_ve = cdc_ve.drop(0).reset_index(drop=True)
     cdc_ve.columns = ['season', 'reference', 'study_sites', 'num_patients',
-                  'overall_ve', 'CI']
+                      'overall_ve', 'CI']
     cdc_ve['season_start'] = cdc_ve['season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
 
@@ -136,7 +134,7 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
 
     # Add the hover tool for just the "average" sequences (name="avg")
     hover_avg = HoverTool(names=['avg'])
-    hover_avg.tooltips=[
+    hover_avg.tooltips = [
         ("Average Sequence, Year", "@year")
     ]
     p.add_tools(hover_avg)
@@ -195,7 +193,9 @@ def make_coord_plots():
     vaccine_strains_by_name = defaultdict(list)
     for year, strain in vaccine_strains.items():
         vaccine_strains_by_name[strain].append(year)
-    vacc_data['years_deployed'] = vacc_data['Strain Name'].apply(lambda x: vaccine_strains_by_name[x])
+    vacc_data['years_deployed'] = vacc_data['Strain Name'].apply(
+        lambda x: vaccine_strains_by_name[x]
+    )
     vacc_src = ColumnDataSource(vacc_data)
 
     # Resample data to quarterly data.
