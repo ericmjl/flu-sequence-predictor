@@ -101,7 +101,7 @@
                                 <p>This done using custom Python code and the <code>BioPython</code> and <code>numpy</code> packages.</p>
 
                                 <h4>One-Hot Encoding</h4>
-                                <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector. Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
+                                <p>Sequences were then one-hot encoded at each position. Memory was not an issue, and as such each amino acid position was converted into 24-long vector, with one slot in the vector per canonical amino acid, three more for ambiguous a.a. (B, J, X), and one for the padding character ("*"). Each vector slot represents an amino acid letter. A "1" is placed in a slot if the amino acid at the currently considered position corresponds to that slot's letter, and a "0" is placed everywhere else. </p>
 
                                 <p>This was accomplished using the <code>sklearn.preprocessing</code> module.</p>
 
