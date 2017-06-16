@@ -44,12 +44,15 @@ def make_vaccine_effectiveness_plot():
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
     p.y_range = Range1d(0, 100)
-    p.line(x='season_start', y='overall_ve',
+    p.line(x='season_start',
+           y='overall_ve',
            source=cdc_src,
            line_width=2)
-    p.circle(x='season_start', y='overall_ve',
+    p.circle(x='season_start',
+             y='overall_ve',
              source=cdc_src,
-             radius=5, radius_units='screen')
+             radius=5,
+             radius_units='screen')
     endtime = datetime.now()
     elapsed = endtime - starttime
     print(f'make_vaccine_effectiveness_plot() took {elapsed} seconds')
@@ -78,10 +81,18 @@ def make_num_sequences_per_year_plot():
                plot_height=200,
                tools=tools,
                title='Num. Sequences Per Year')
-    p.line(x='Year', y='Name', source=seqperyear_src, line_width=2)
-    p.circle(x='Year', y='Name',
+
+    p.line(x='Year',
+           y='Name',
+           source=seqperyear_src,
+           line_width=2)
+
+    p.circle(x='Year',
+             y='Name',
              source=seqperyear_src,
-             radius=5, radius_units='screen')
+             radius=5,
+             radius_units='screen')
+
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Number of Sequences'
 
@@ -120,7 +131,8 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     p.square(x='coords{0}'.format(cx),
              y='coords{0}'.format(cy),
              color='blue',
-             line_color="black", line_width=2,
+             line_color="black",
+             line_width=2,
              name="vacc",
              size=10,
              source=vacc_src)
@@ -191,8 +203,10 @@ def make_coord_plots():
     vacc_data.drop_duplicates(subset=['Strain Name'], inplace=True)
     vacc_data['years_deployed'] = 0
     vaccine_strains_by_name = defaultdict(list)
+
     for year, strain in vaccine_strains.items():
         vaccine_strains_by_name[strain].append(year)
+
     vacc_data['years_deployed'] = vacc_data['Strain Name'].apply(
         lambda x: vaccine_strains_by_name[x]
     )
