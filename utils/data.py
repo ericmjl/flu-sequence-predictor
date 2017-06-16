@@ -17,7 +17,7 @@ def load_sequence_and_metadata(kind='feather'):
     sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta',
                                         'fasta')]
     if kind == 'csv':
-        metadata = pd.read_csv('data/20170531-H3N2-global.csv')
+        metadata = pd.read_csv('data/20170531-H3N2-global.tsv')
     elif kind == 'feather':
         metadata = pd.read_feather('data/20170531-H3N2-global.feather')
     endtime = datetime.now()
