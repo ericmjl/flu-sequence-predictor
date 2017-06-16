@@ -19,7 +19,9 @@ def load_sequence_and_metadata(kind='feather'):
     if kind == 'csv':
         metadata = pd.read_csv('data/20170531-H3N2-global.tsv')
     elif kind == 'feather':
-        metadata = pd.read_feather('data/20170531-H3N2-global.feather')
+        metadata = pd.read_feather('data/20170531-H3N2-global.feather',
+                                   sep='\t',
+                                   parse_dates=['Collection Date'])
     endtime = datetime.now()
     elapsed = endtime - starttime
     print(f'load_sequence_and_metadata() took {elapsed} seconds.')
