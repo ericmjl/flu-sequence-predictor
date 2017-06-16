@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def load_sequence_and_metadata():
+def load_sequence_and_metadata(kind='feather'):
     """
     Returns the sequences as a list of SeqRecords, and metadata as a pandas
     DataFrame.
@@ -16,7 +16,10 @@ def load_sequence_and_metadata():
     starttime = datetime.now()
     sequences = [s for s in SeqIO.parse('data/20170531-H3N2-global.fasta',
                                         'fasta')]
-    metadata = pd.read_feather('data/20170531-H3N2-global.feather')
+    if kind == 'csv':
+        metadata = pd.read_csv('data/20170531-H3N2-global.csv')
+    elif kind == 'feather':
+        metadata = pd.read_feather('data/20170531-H3N2-global.feather')
     endtime = datetime.now()
     elapsed = endtime - starttime
     print(f'load_sequence_and_metadata() took {elapsed} seconds.')
