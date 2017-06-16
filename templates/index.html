@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container" width="800px">
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-sm-12 col-md-12 col-lg-10 col-lg-offset-1">
         <div class="row" id="page-heading">
             <div class="col-md-12">
                 <h1>Flu Forecaster</h1>
@@ -10,17 +10,28 @@
 
                 <h2>Summary</h2>
                 <p>In this project, I combine the use of variational autoencoders and gaussian process regression to forecast what influenza protein sequences will look like six months ahead.</p>
+
+                <p>In this project:</p>
+                <ul>
+                    <li>VAEs transform discrete sequence to a continuous representation.</li>
+                    <li>We use GPs for time-series regression to forecast future continuous space representations of flu.</li>
+                    <li>We then take the forecasted representations, and pass them back through the VAE to get back predicted sequences.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" id="problem-text-title">
+            <div class="col-md-12" id="problem-title">
+                <h2>Problem</h2>
             </div>
         </div>
         <div class="row" id="problem-text-row">
             <div class="col-md-8" id="problem-text">
-                <h2>Problem</h2>
                 <p>Influenza vaccine strain selection lags behind deployment by about 6 months to 2 years, while production lags behind deployment by about 6 months. Additionally, vaccine strains are selected from amongst currently-circulating strains.</p>
 
                 <p><b>This means that the flu virus will have evolved by the time the vaccine strain is scaled into production.</b></p>
             </div>
             <div class="col-md-4" id="fig-vaccine">
-                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production-sm.jpg" alt="Vaccine production lag time." width="350px">
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/vaccine-production-sm.jpg" alt="Vaccine production lag time." width="100%">
                 <p><i>Large lag time from vaccine strain selection to actual deployment.</i></p>
             </div>
         </div>
@@ -33,19 +44,23 @@
             <div class="col-md-4" id="vaccine-effectiveness-plot">
                 {{ ve_div|safe }}
 
-                <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p>
+                <!-- <p><i>Vaccine effectiveness has not historically been high. Data from the <a href="https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm">CDC</a></i>.</p> -->
+            </div>
+        </div>
+        <div class="row" id="data-title-row">
+            <div class="col-md-12">
+                <h2>Data</h2>
             </div>
         </div>
         <div class="row" id="data-text-row">
             <div class="col-md-8" id="data-source-text">
-                <h2>Data</h2>
                 <p>The data are sourced from the <a href="https://www.fludb.org/brc/home.spg?decorator=influenza">Influenza Research Database</a>, a publicly-hosted repository of influenza sequencing data. Each virus that is sequenced is geographically- and time-stamped. The data I collected span the years {{ nseq_metadata['min_year'] }}-{{  nseq_metadata['max_year'] }}. I only downloaded hemagglutinin (HA) protein sequence, because it is the protein most determinant of an immune response; <b>if the vaccine strain's HA sequence is similar to the circulating strain's HA sequence, then it will provide protection against the circulating strain</b>.</p>
 
                 <p>There are multiple subtypes of influenza; some you may have heard include "H1N1", "H3N2" and "H5N1". I focused only on H3 hemagglutinin protein sequences sourced from human patients worldwide. In total, there are {{ nseq_metadata['n_seqs'] }} influenza sequences considered in the dataset.</p>
             </div>
             <div class="col-md-4" id="data-per-year-plot">
                 {{ nseq_div|safe }}
-                <p><i>Number of influenza sequences per year in the dataset used for Flu Forecaster.</i></p>
+                <!-- <p><i>Number of influenza sequences per year in the dataset used for Flu Forecaster.</i></p> -->
             </div>
         </div>
         <div class="row" id="analysis-methods-and-tools-header-row">
@@ -54,9 +69,19 @@
                 <img src="https://github.com/ericmjl/flu-sequence-predictor/raw/master/images/overview-figure-sm.jpg" alt="" width="100%">
             </div>
         </div>
-        <div class="row" id="analysis-methods-and-tools-text-row">
-            <div class="col-md-4" id="preprocessing-column">
+        <div class="row" id="analysis-methods-titles">
+            <div class="col-md-4" id="preprocessing-title-column">
                 <h3>Data Preprocessing</h3>
+            </div>
+            <div class="col-md-4" id="vae-title-column">
+                <h3>Variational Autoencoders</h3>
+            </div>
+            <div class="col-md-4" id="gp-title-column">
+                <h3>Gaussian Process Regression</h3>
+            </div>
+        <div class="row" id="analysis-methods-and-tools-text-row">
+            </div>
+            <div class="col-md-4" id="preprocessing-text-column">
                 <p>Sequences were padded with <code>*</code> (asterisk) characters to the maximal length. They were then one-hot-encoded at each position, yielding a sparse binary matrix representation of each protein's amino acid sequence. Of the 18 years of data used, 17 years (2000-2016) were part of the training set, and the final year (2017) was held out for forecasting validation.</p>
 
                 <button type="button" name="learn-more-preprocessing" class="btn btn-primary" data-toggle="modal" data-target="#preprocessingModal">Learn More</button>
@@ -95,8 +120,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" id="vae-column">
-                <h3>Variational Autoencoders</h3>
+            <div class="col-md-4" id="vae-text-column">
                 <p>VAEs were used to learn a continuous latent embedding/representation of the binary encoded protein sequence on which a Gaussian Process regression model could be used for forecasting. It learns a generative model of sequence space, allowing us to sample new sequences out of forecasted latent space.</p>
 
                 <button type="button" name="learn-more-vae" class="btn btn-primary" data-toggle="modal" data-target="#vaeModal">Learn More</button>
@@ -124,8 +148,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4" id="gp-column">
-                <h3>Gaussian Process Regression</h3>
+            <div class="col-md-4" id="gp-text-column">
+
                 <p>Gaussian Processes were used to forecast the latent embedding coordinates for future influenza sequences. The forecasted coordinates were passed back to the decoder portion of the VAE to provide the probability distribution over possible sequences.</p>
 
                 <button type="button" name="learn-more-gp" class="btn btn-primary" data-toggle="modal" data-target="#gpModal">Learn More</button>
@@ -156,7 +180,7 @@
         <div class="row" id="predicted-sequences-row">
             <div class="col-md-12">
                 <h2>Predicted Sequences</h2>
-                <p>`Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
+                <p>Given the current evolutionary trajectory of the influenza A virus, there are {{ n_seqs }} distinct predicted "average" influenza hemagglutinin sequences for the coming quarter.</p>
             </div>
         </div>
         <div class="row" id="multiple-sequence-alignment-row">
@@ -178,7 +202,7 @@
             </div>
             <div class="col-md-6" id="forecasted-sequences-text">
                 <h3>Forecasted Sequences</h3>
-                <p>Forecasted sequences are visualized using <b>bounding boxes</b>. Each bounding box represents one sequence, and they are coloured differently. In 3D space, each unique sequence takes up a "volume"; sequences with larger "volumes" (or areas in the 2D projection) have larger forecasted probability of showing up. The uncertainty in the forecasts are thus represented by the <b>probability distribution over possible discrete sequences</b>. In other words, we don't forecast one sequence, but a set of sequences.</p>
+                <p>Forecasted sequences are visualized using <b>bounding boxes</b>. Each bounding box represents one sequence, and they are coloured differently. In 3D space, each unique sequence takes up a "volume"; sequences with larger "volumes" (or areas in the 2D projection) have larger forecasted probability of showing up. The uncertainty in the forecasts are thus represented by the <b>probability distribution over possible discrete sequences</b>. In other words, we don't forecast one sequence, but a set of sequences. For visual simiplicity, only those sequences with a greater than 2.5% probability of showing up are shown.</p>
             </div>
         </div>
         <div class="row" id="evolutionary-trajectory-plots-row">
@@ -210,13 +234,6 @@
             <div class="col-md-12">
                 <h2>Conclusions</h2>
                 <p>Forecasting how sequences evolve is a tough problem, primarily because there's no notion of "forward momentum" when talking about changes in sequence land. However, if we transform the problem into one involving a "continuous" representation, we can take advantage of concepts like momentum vectors and gradients, and harness tools from continuous time-series regression.</p>
-
-                <p>In this project:</p>
-                <ul>
-                    <li>VAEs transform discrete sequence to a continuous representation.</li>
-                    <li>We use GPs for time-series regression to forecast future continuous space representations of flu.</li>
-                    <li>We then take the forecasted representations, and pass them back through the VAE to get back predicted sequences.</li>
-                </ul>
             </div>
         </div>
     </div>

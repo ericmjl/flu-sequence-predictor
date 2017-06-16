@@ -6,11 +6,7 @@ from bokeh.resources import INLINE
 import logging
 from logging.handlers import RotatingFileHandler
 
-# logger = logging.getLogger('werkzeug')
-# logger.setLevel(logging.DEBUG)
-
 app = Flask(__name__)
-# app.config['LOGGER_NAME'] = 'werkzeug'
 
 
 @app.route('/')

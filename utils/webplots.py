@@ -28,7 +28,6 @@ def make_vaccine_effectiveness_plot():
                   'overall_ve', 'CI']
     cdc_ve['season_start'] = cdc_ve['season'].str.split('-').str[0]\
         .apply(lambda x: str(x))
-    # print('downloaded and preprocessed vaccine effectiveness data.')
 
     # Configure Bokeh Plot
     cdc_src = ColumnDataSource(cdc_ve)
@@ -40,13 +39,19 @@ def make_vaccine_effectiveness_plot():
     tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
 
     # Make Bokeh Plot
-    p = figure(plot_width=350, plot_height=200,
+    p = figure(title='Yearly Vaccine Effectiveness',
+               plot_height=200,
+               plot_width=300,
                tools=tools)
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
     p.y_range = Range1d(0, 100)
-    p.line(x='season_start', y='overall_ve', source=cdc_src)
-    p.circle(x='season_start', y='overall_ve', source=cdc_src)
+    p.line(x='season_start', y='overall_ve',
+           source=cdc_src,
+           line_width=2)
+    p.circle(x='season_start', y='overall_ve',
+             source=cdc_src,
+             radius=5, radius_units='screen')
     endtime = datetime.now()
     elapsed = endtime - starttime
     print(f'make_vaccine_effectiveness_plot() took {elapsed} seconds')
@@ -70,13 +75,19 @@ def make_num_sequences_per_year_plot():
     ]
     tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
 
-    p = figure(plot_width=350, plot_height=200,
-               tools=tools)
-    p.line(x='Year', y='Name', source=seqperyear_src)
-    p.circle(x='Year', y='Name', source=seqperyear_src)
+    # Make figure
+    p = figure(plot_width=300,
+               plot_height=200,
+               tools=tools,
+               title='Num. Sequences Per Year')
+    p.line(x='Year', y='Name', source=seqperyear_src, line_width=2)
+    p.circle(x='Year', y='Name',
+             source=seqperyear_src,
+             radius=5, radius_units='screen')
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Number of Sequences'
 
+    # Collate metadata dictionary.
     meta = dict()
     meta['n_seqs'] = len(metadata)
     meta['min_year'] = min(metadata['Year'])
@@ -95,14 +106,16 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     cx, cy = coords
     assert cx != cy
 
-    p = figure(webgl=True, plot_height=300, plot_width=300,
+    p = figure(webgl=True,
                tools='pan,box_select,wheel_zoom,reset')
 
     # Plot the "average coordinates per quarter.".
     p.scatter(x='coords{0}'.format(cx),
               y='coords{0}'.format(cy),
-              color='palette', source=src,
-              size=10, line_color='black', line_width=2,
+              source=src,
+              color='palette',
+              size=10,
+              line_color='black', line_width=2,
               name='avg')
 
     # Plot the vaccine strains.
@@ -116,17 +129,23 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
 
     # Add the hover tool for only the vaccine plot (name="vacc")
     hover_vacc = HoverTool(names=["vacc"])
-    hover_vacc.tooltips = [("Vaccine, Years Deployed", "@years_deployed"),]
+    hover_vacc.tooltips = [
+        ("Vaccine, Years Deployed", "@years_deployed"),
+    ]
     p.add_tools(hover_vacc)
 
     # Add the hover tool for just the "average" sequences (name="avg")
     hover_avg = HoverTool(names=['avg'])
-    hover_avg.tooltips=[("Average Sequence, Year", "@year")]
+    hover_avg.tooltips=[
+        ("Average Sequence, Year", "@year")
+    ]
     p.add_tools(hover_avg)
 
     dim1 = 'coords{0}'.format(cx)
     dim2 = 'coords{0}'.format(cy)
 
+    # Plot bounding boxes for the forecasted sequenes. Only those with greater
+    # than 2.5% probability (i.e. 25/1000) are shown.
     xs_all = []
     ys_all = []
     colors = []
@@ -134,15 +153,15 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
             predcoords.groupby(['matplotlib_colors', 'hexdecimal_colors']):
         d = dat[[dim1, dim2]]
 
-        if len(d) >=10:
+        if len(d) >= 25:  # 25 = 2.5% of 1000.
             xs = []
             ys = []
             hull = ConvexHull(d[[dim1, dim2]])
             for v in hull.vertices:
                 xs.append(d.iloc[v][dim1])
                 ys.append(d.iloc[v][dim2])
-            xs.append(xs[0])
-            ys.append(ys[0])
+            xs.append(xs[0])  # re-append first data point so that line goes
+            ys.append(ys[0])  # back to the original point.
             xs_all.append(xs)
             ys_all.append(ys)
             colors.append(hex_color)
@@ -184,11 +203,11 @@ def make_coord_plots():
     palette = inferno(len(data))
     data['palette'] = palette
 
-
     src = ColumnDataSource(data)
 
     predcoords = load_prediction_coordinates()
 
+    # Make the coordinate scatter plots
     p1 = make_coordinate_scatterplot([0, 1], src, predcoords, vacc_src)
     p2 = make_coordinate_scatterplot([1, 2], src, predcoords, vacc_src)
     p2.x_range = p1.y_range
@@ -196,7 +215,8 @@ def make_coord_plots():
     p3.x_range = p1.x_range
     p3.y_range = p2.y_range
 
-    r1 = row(p1, p2, p3)
+    # Create the plot layout - using rows.
+    r1 = row([p1, p2, p3], responsive=True)
 
     evo_script, evo_div = components(r1)
 
