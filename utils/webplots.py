@@ -38,8 +38,8 @@ def make_vaccine_effectiveness_plot():
 
     # Make Bokeh Plot
     p = figure(title='Yearly Vaccine Effectiveness',
-               plot_height=200,
-               plot_width=300,
+               plot_height=300,
+               plot_width=350,
                tools=tools)
     p.xaxis.axis_label = 'Year'
     p.yaxis.axis_label = 'Vaccine Effectiveness (%)'
@@ -77,8 +77,8 @@ def make_num_sequences_per_year_plot():
     tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
 
     # Make figure
-    p = figure(plot_width=300,
-               plot_height=200,
+    p = figure(plot_height=300,
+               plot_width=350,
                tools=tools,
                title='Num. Sequences Per Year')
 
@@ -116,7 +116,9 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     assert cx != cy
 
     p = figure(webgl=True,
-               tools='pan,box_select,wheel_zoom,reset')
+               tools='pan,box_select,wheel_zoom,reset',
+               plot_width=300,
+               plot_height=250)
 
     # Plot the "average coordinates per quarter.".
     p.scatter(x='coords{0}'.format(cx),
