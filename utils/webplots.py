@@ -2,7 +2,7 @@ from bokeh.layouts import row
 from bokeh.plotting import figure
 from bokeh.palettes import inferno
 from bokeh.models import (ColumnDataSource, Range1d, PanTool, HoverTool,
-                          ResetTool, CrosshairTool)
+                          ResetTool, CrosshairTool, SaveTool)
 from bokeh.embed import components
 from utils.data import load_sequence_and_metadata, load_prediction_coordinates
 from scipy.spatial import ConvexHull
@@ -34,7 +34,7 @@ def make_vaccine_effectiveness_plot():
         ("Year", "@season_start"),
         ("Effectiveness (%)", "@overall_ve")
     ]
-    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
+    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool(), SaveTool()]
 
     # Make Bokeh Plot
     p = figure(title='Yearly Vaccine Effectiveness',
@@ -74,7 +74,7 @@ def make_num_sequences_per_year_plot():
         ("Year", "@Year"),
         ("Num. Sequences", "@Name")
     ]
-    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool()]
+    tools = [PanTool(), CrosshairTool(), hover_tool, ResetTool(), SaveTool()]
 
     # Make figure
     p = figure(plot_height=300,
@@ -116,7 +116,7 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     assert cx != cy
 
     p = figure(webgl=True,
-               tools='pan,box_select,wheel_zoom,reset',
+               tools='pan,box_select,wheel_zoom,reset,save',
                plot_width=300,
                plot_height=250)
 
