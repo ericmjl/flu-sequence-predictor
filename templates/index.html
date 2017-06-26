@@ -213,7 +213,8 @@
             <div class="col-md-6" id="time-varying-evolution-text">
                 <h3>Time-varying Evolution</h3>
                 <p>Using a variational autoencoder, we can visualize the evolutionary trajectory of viral proteins in lower dimensions. In Flu Forecaster, I have chosen to visualize them in 3 dimensions. Because 3D visualizations are difficult in the browser, I have decomposed the plots to show pairs of dimensions at a time.</p>
-                <p>Each point in the scatterplot below is a representation of the "average" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+                <p>Each point in the scatterplot below is a representation of the "median" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/scatter-colorbar-sm.jpg" alt="" width=100%>
             </div>
             <div class="col-md-6" id="forecasted-sequences-text">
                 <h3>Forecasted Sequences</h3>
@@ -233,14 +234,14 @@
         </div>
         <div class="row" id="improvements-explanation-row">
             <div class="col-md-6" id="gp-training-text">
-                <h3>Forecasting</h3>
-                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>
+                <h3>Forecasting Diversity</h3>
+                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "median sequence" that we expect to see. This "median" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids, representing the diversity of amino acid sequences possible. In order to accomplish this, I would use sparse gaussian process regression as implemented in <code>GPflow</code>. Increase compute power is also an option.</p>
 
-                <p>Apart from this, the GP coordinate dimensions are trained independently. It would be better to train the GP on all 3 dimensions jointly. However, this would also require greater compute resources.</p>
+                <p>Apart from this, the GP coordinate dimensions are trained independently. It may be better to train the GP on all 3 dimensions jointly, though experimentation would be needed to determine whether increased computational complexity would be worth the accuracy.</p>
             </div>
             <div class="col-md-6" id="forecasting-validation">
                 <h3>Forecasting Validation</h3>
-                <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
+                <p>More work needs to be done on backtesting. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
 
                 <p>For more information on the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
             </div>
