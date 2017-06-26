@@ -27,7 +27,7 @@
         <div class="row" id="summary-text">
             <div class="col-md-12">
                 <h2>Summary</h2>
-                <p>In this project, I combine the use of variational autoencoders and gaussian process regression to forecast what influenza protein sequences will look like six months ahead.</p>
+                <p>In this project, I combine the use of Variational Autoencoders (VAEs) and Gaussian Process (GP) regression to forecast what influenza protein sequences will look like six months ahead.</p>
 
                 <p>In this project:</p>
                 <ul>
@@ -178,7 +178,7 @@
 
                                 <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
 
-                                <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
+                                <p>Variational Autoencoders were implemented using the <code>Keras</code> package.</p>
                             </div>
                         </div>
                     </div>
@@ -243,14 +243,16 @@
             </div>
         </div>
         <div class="row" id="improvements-explanation-row">
-            <div class="col-md-6" id="gp-training-text">
+            <div class="col-md-4" id="forecasting-diversity-text">
                 <h3>Forecasting Diversity</h3>
-                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "median sequence" that we expect to see. This "median" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids, representing the diversity of amino acid sequences possible. In order to accomplish this, I would use sparse gaussian process regression as implemented in <code>GPflow</code>. Increase compute power is also an option.</p>
-
-                <p>Apart from this, the GP coordinate dimensions are trained independently. It may be better to train the GP on all 3 dimensions jointly, though experimentation would be needed to determine whether increased computational complexity would be worth the accuracy.</p>
+                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "median sequence" that we expect to see. This "median" sequence actually differs from other-circulating viruses by anywhere from 6-19 amino acids, and the other protein sequences represent the diversity/variance of amino acid sequences possible. In order to accomplish this, I would have to train both the mean and the variance in each coordinate dimension, and jointly sample coordinates using both the mean and variance.</p>
             </div>
-            <div class="col-md-6" id="forecasting-validation">
-                <h3>Forecasting Validation</h3>
+            <div class="col-md-4" id="gp-training-text">
+                <h3>GP Training</h3>
+                <p>The Gaussian Process coordinate dimensions are trained independently. It may be better to train the GP on all 3 dimensions jointly, though experimentation would be needed to determine whether increased computational complexity would be worth the accuracy.</p>
+            </div>
+            <div class="col-md-4" id="validation-text">
+                <h3>Validation</h3>
                 <p>More work needs to be done on backtesting. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
 
                 <p>For more information on the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
@@ -293,7 +295,7 @@
         },
         // smaller menu for JSBin
         // menu: "small",
-        bootstrapMenu: true,
+        // bootstrapMenu: true,
         importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/twoQ_predictions.fasta",
     };
 
