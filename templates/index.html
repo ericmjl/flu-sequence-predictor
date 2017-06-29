@@ -10,11 +10,24 @@
         </div>
         <div class="row" id="page-heading">
             <div class="col-md-6">
-                <h4>Predicting influenza sequence evolution using machine learning.</h4>
-                <p>by <a href="http://www.ericmjl.com/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
+                <h4>Predicting influenza sequence evolution using deep learning.</h4>
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/eric-ma-headshot.jpg" alt="Eric J. Ma" style="clip-path: circle(75px at center); width: 150px; height: 150px; margin-left: auto; margin-right: auto; display: block;">
+                <h1 style="text-align: center">
+                    <a href="https://twitter.com/ericmjl"><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+                    <a href="https://github.com/ericmjl"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+                    <a href="https://www.linkedin.com/in/ericmjl/"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+                </h1>
 
+                <p>by <a href="http://www.ericmjl.com/">Eric J. Ma</a>, Insight Health Data Science Fellow, Boston Summer Session 2017</p>
+            </div>
+            <div class="col-md-6">
+                <iframe src="https://docs.google.com/presentation/d/1GHSUZHxxEATvhhffTnpjJIoKW65ZJ0NeQ3M4hh_fYzI/embed?start=false&loop=false&delayms=3000" frameborder="0" width="480" height="299" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+            </div>
+        </div>
+        <div class="row" id="summary-text">
+            <div class="col-md-12">
                 <h2>Summary</h2>
-                <p>In this project, I combine the use of variational autoencoders and gaussian process regression to forecast what influenza protein sequences will look like six months ahead.</p>
+                <p>In this project, I combine the use of Variational Autoencoders (VAEs) and Gaussian Process (GP) regression to forecast what influenza protein sequences will look like six months ahead.</p>
 
                 <p>In this project:</p>
                 <ul>
@@ -22,11 +35,9 @@
                     <li>We use GPs for time-series regression to forecast future continuous space representations of flu.</li>
                     <li>We then take the forecasted representations, and pass them back through the VAE to get back predicted sequences.</li>
                 </ul>
-            </div>
-            <div class="col-md-6">
-                <iframe src="https://docs.google.com/presentation/d/1GHSUZHxxEATvhhffTnpjJIoKW65ZJ0NeQ3M4hh_fYzI/embed?start=false&loop=false&delayms=3000" frameborder="0" width="480" height="299" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-            </div>
+                <p>Source code for this project can be found <a href="https://github.com/ericmjl/flu-sequence-predictor">on GitHub</a>.</p>
 
+            </div>
         </div>
         <div class="row" id="predicted-sequences-row">
             <div class="col-md-12">
@@ -91,7 +102,7 @@
         <div class="row" id="analysis-methods-and-tools-header-row">
             <div class="col-md-12" id="analysis-methods-and-tools-header-container">
                 <h2>Analysis Methods and Tools</h2>
-                <img src="https://github.com/ericmjl/flu-sequence-predictor/raw/master/images/overview-figure-sm.jpg" alt="" width="100%">
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/overview-figure-slides-sm.jpg" alt="" width="100%">
             </div>
         </div>
         <div class="row" id="analysis-methods-titles">
@@ -167,7 +178,7 @@
 
                                 <p><b>Basically</b>, VAEs give us a convenient representation of sequence space that lets us do other machine learning on it.</p>
 
-                                <p>Variational autoencoders were implemented using the <code>Keras</code> package.</p>
+                                <p>Variational Autoencoders were implemented using the <code>Keras</code> package.</p>
                             </div>
                         </div>
                     </div>
@@ -212,7 +223,8 @@
             <div class="col-md-6" id="time-varying-evolution-text">
                 <h3>Time-varying Evolution</h3>
                 <p>Using a variational autoencoder, we can visualize the evolutionary trajectory of viral proteins in lower dimensions. In Flu Forecaster, I have chosen to visualize them in 3 dimensions. Because 3D visualizations are difficult in the browser, I have decomposed the plots to show pairs of dimensions at a time.</p>
-                <p>Each point in the scatterplot below is a representation of the "average" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+                <p>Each point in the scatterplot below is a representation of the "median" flu sequence per calendar quarter. The points are coloured by time - dark colours are earlier (starting at the year 2000), and light colours are later (ending at the year 2016).</p>
+                <img src="https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/images/scatter-colorbar-sm.jpg" alt="" width=100%>
             </div>
             <div class="col-md-6" id="forecasted-sequences-text">
                 <h3>Forecasted Sequences</h3>
@@ -231,17 +243,17 @@
             </div>
         </div>
         <div class="row" id="improvements-explanation-row">
-            <div class="col-md-6" id="gp-training-text">
-                <h3>Forecasting</h3>
-                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "average sequence" that we expect to see. This "average" sequence actually differs from actually-circulating viruses by anywhere from 6-19 amino acids. Given better compute resources and algorithm tweaking, I would be able to train a GP on the evolutionary coordinates better.</p>
-
-                <p>Apart from this, the GP coordinate dimensions are trained independently. It would be better to train the GP on all 3 dimensions jointly. However, this would also require greater compute resources.</p>
+            <div class="col-md-4" id="forecasting-diversity-text">
+                <h3>Forecasting Diversity</h3>
+                <p>Right now, Flu Forecaster predicts forecasted sequences one quarter out, and only predicts the "median sequence" that we expect to see. This "median" sequence actually differs from other-circulating viruses by anywhere from 6-19 amino acids, and the other protein sequences represent the diversity/variance of amino acid sequences possible. In order to accomplish this, I would have to train both the mean and the variance in each coordinate dimension, and jointly sample coordinates using both the mean and variance.</p>
             </div>
-            <div class="col-md-6" id="forecasting-validation">
-                <h3>Forecasting Validation</h3>
-                <p>More work needs to be done on forecasting validation, more specifically, on <b>backtesting</b>. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
-
-                <p>For more information on the best way to perform backtesting, see <a href="http://multithreaded.stitchfix.com/blog/2017/02/28/whats-wrong-with-my-time-series/">this</a> blog post on the StitchFix blog.</p>
+            <div class="col-md-4" id="gp-training-text">
+                <h3>GP Training</h3>
+                <p>The Gaussian Process coordinate dimensions are trained independently. It may be better to train the GP on all 3 dimensions jointly, though experimentation would be needed to determine whether increased computational complexity would be worth the accuracy.</p>
+            </div>
+            <div class="col-md-4" id="validation-text">
+                <h3>Validation</h3>
+                <p>More work needs to be done on backtesting. Currently, I am doing model validation by checking that the 2017 "average" coordinates fall within the 95% HPD of the latent space coordinates. I have yet to perform more periods of backtesting, in which I hold out more than just two quarters of data.</p>
             </div>
         </div>
         <div class="row" id="conclusions-row">
@@ -250,40 +262,55 @@
                 <p>Forecasting how sequences evolve is a tough problem, primarily because there's no notion of "forward momentum" when talking about changes in sequence land. However, if we transform the problem into one involving a "continuous" representation, we can take advantage of concepts like momentum vectors and gradients, and harness tools from continuous time-series regression.</p>
             </div>
         </div>
+        <div class="row" id="about-row">
+            <div class="col-md-12" id="about-author-text">
+                <hr>
+                <h4>Author Info</h4>
+                <p>Eric obtained his ScD (Doctor of Science) degree from the Department of Biological Engineering at MIT in 2017. He is an avid open source fan, and believes in the Bassist's philosophy: do important work and pace the team behind the scenes, and step up front only when necessary. His personal website can be found at <a href="http://www.ericmjl.com">www.ericmjl.com</a>.</p>
+            </div>
+        </div>
+        <div class="row" id="hr-row">
+            <div class="col-md-12" id="hr-col">
+                <hr>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- JS Scripts -->
-    <!-- Multiple sequence alignment scripts -->
-    <script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
-    <script>
-        var opts = {
-            el: document.getElementById("multiple-sequence-alignment"),
-            vis: {
-              conserv: true,
-              overviewbox: false,
-              seqlogo: true,
-            },
-            colorscheme: {
-              scheme: "clustal2"
-            },
-            // smaller menu for JSBin
-            // menu: "small",
-            bootstrapMenu: true,
-            importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/twoQ_predictions.fasta",
-        };
+<!-- Multiple sequence alignment scripts -->
+<script src="https://s3.eu-central-1.amazonaws.com/cdn.bio.sh/msa/latest/msa.min.gz.js"></script>
+<script>
+    var opts = {
+        el: document.getElementById("multiple-sequence-alignment"),
+        vis: {
+          conserv: true,
+          overviewbox: false,
+          seqlogo: true,
+        },
+        colorscheme: {
+          scheme: "clustal2"
+        },
+        // smaller menu for JSBin
+        // menu: "small",
+        // bootstrapMenu: true,
+        importURL: "https://raw.githubusercontent.com/ericmjl/flu-sequence-predictor/master/data/twoQ_predictions.fasta",
+    };
 
-        var m = new msa.msa(opts);
-        	m.render();
+    var m = new msa.msa(opts);
+        m.render();
 
-    </script>
+</script>
 
-    <!-- Bokeh JS -->
-    {{ js_resources|indent(4)|safe }}
-    {{ css_resources|indent(4)|safe }}
-    <!-- Bokeh Plots -->
-    {{ evo_script|indent(4)|safe }}
-    {{ nseq_script|safe }}
-    {{ ve_script|safe }}
+<!-- FontAwesome -->
+<script src="https://use.fontawesome.com/cb9dbe8e41.js"></script>
 
+
+<!-- Bokeh JS -->
+{{ js_resources|indent(4)|safe }}
+{{ css_resources|indent(4)|safe }}
+<!-- Bokeh Plots -->
+{{ evo_script|indent(4)|safe }}
+{{ nseq_script|safe }}
+{{ ve_script|safe }}
 {% endblock %}
