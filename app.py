@@ -1,10 +1,12 @@
-from Bio import SeqIO
-from utils.webplots import (make_vaccine_effectiveness_plot,
-                            make_num_sequences_per_year_plot, make_coord_plots)
-from flask import Flask, render_template
-from bokeh.resources import INLINE
 import logging
 from logging.handlers import RotatingFileHandler
+
+from Bio import SeqIO
+from bokeh.resources import INLINE
+from flask import Flask, render_template
+
+from utils.webplots import (make_coord_plots, make_num_sequences_per_year_plot,
+                            make_vaccine_effectiveness_plot)
 
 app = Flask(__name__)
 

@@ -1,15 +1,17 @@
-from bokeh.layouts import row
-from bokeh.plotting import figure
-from bokeh.palettes import inferno
-from bokeh.models import (ColumnDataSource, Range1d, PanTool, HoverTool,
-                          ResetTool, CrosshairTool, SaveTool)
-from bokeh.embed import components
-from utils.data import load_sequence_and_metadata, load_prediction_coordinates
-from scipy.spatial import ConvexHull
 from collections import defaultdict
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
 import yaml
+from bokeh.embed import components
+from bokeh.layouts import row
+from bokeh.models import (ColumnDataSource, CrosshairTool, HoverTool, PanTool,
+                          Range1d, ResetTool, SaveTool)
+from bokeh.palettes import inferno
+from bokeh.plotting import figure
+from scipy.spatial import ConvexHull
+
+from utils.data import load_prediction_coordinates, load_sequence_and_metadata
 
 
 def make_vaccine_effectiveness_plot():

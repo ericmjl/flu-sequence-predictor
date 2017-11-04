@@ -1,7 +1,9 @@
-import numpy as np
-from sklearn.preprocessing import LabelBinarizer
 from collections import Counter
 from copy import deepcopy
+
+import numpy as np
+from sklearn.preprocessing import LabelBinarizer
+
 from keras.models import model_from_yaml
 
 

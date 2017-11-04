@@ -1,7 +1,8 @@
-from Bio import SeqIO
-import pandas as pd
 import logging
 from datetime import datetime
+
+import pandas as pd
+from Bio import SeqIO
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
