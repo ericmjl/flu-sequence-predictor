@@ -20,7 +20,7 @@ def make_vaccine_effectiveness_plot():
     """
     # Download and preprocess data.
     starttime = datetime.now()
-    cdc_tables = pd.read_html('https://www.cdc.gov/flu/professionals/vaccination/effectiveness-studies.htm')  # noqa
+    cdc_tables = pd.read_html('https://www.cdc.gov/flu/vaccines-work/past-seasons-estimates.html')  # noqa
     cdc_ve = cdc_tables[0]
     cdc_ve.columns = cdc_ve.loc[0, :]
     cdc_ve = cdc_ve.drop(0).reset_index(drop=True)
