@@ -133,7 +133,7 @@ def make_coordinate_scatterplot(coords, src, predcoords, vacc_src):
     assert cx != cy
 
     p = figure(
-        webgl=True,
+        # webgl=True,
         tools="pan,box_select,wheel_zoom,reset,save",
         plot_width=300,
         plot_height=250,
@@ -256,7 +256,7 @@ def make_coord_plots():
     p3.y_range = p2.y_range
 
     # Create the plot layout - using rows.
-    r1 = row([p1, p2, p3], responsive=True)
+    r1 = row([p1, p2, p3])
 
     evo_script, evo_div = components(r1)
 
