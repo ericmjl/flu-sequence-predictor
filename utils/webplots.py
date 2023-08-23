@@ -226,7 +226,7 @@ def make_coord_plots():
 
     # Filter out just vaccine strains.
     with open("data/vaccine_strains.yaml", "r+") as f:
-        vaccine_strains = yaml.load(f)
+        vaccine_strains = yaml.load(f, loader=yaml.CLoader)
     vacc_data = data[data["Strain Name"].isin(vaccine_strains.values())]
     vacc_data.drop_duplicates(subset=["Strain Name"], inplace=True)
     vacc_data["years_deployed"] = 0
