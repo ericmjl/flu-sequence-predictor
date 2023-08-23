@@ -14,9 +14,7 @@ def load_sequence_and_metadata(kind="csv"):
     DataFrame.
     """
     starttime = datetime.now()
-    sequences = [
-        s for s in SeqIO.parse("data/20170531-H3N2-global.fasta", "fasta")
-    ]
+    sequences = [s for s in SeqIO.parse("data/20170531-H3N2-global.fasta", "fasta")]
     if kind == "csv":
         metadata = pd.read_csv(
             "data/20170531-H3N2-global.tsv",
@@ -37,8 +35,6 @@ def load_prediction_coordinates():
     as a pandas DataFrame.
     """
     logger.debug("started load_prediction_coordinates()")
-    df = pd.read_csv(
-        "data/oneQ_prediction_coords_with_colors.csv", index_col=0
-    )
+    df = pd.read_csv("data/oneQ_prediction_coords_with_colors.csv", index_col=0)
     logger.debug("finished load_prediction_coordinates()")
     return df

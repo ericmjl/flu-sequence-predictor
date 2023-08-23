@@ -82,7 +82,9 @@ def make_num_sequences_per_year_plot():
     starttime = datetime.now()
     # Download and Preprocess Data
     sequences, metadata = load_sequence_and_metadata()
-    metadata["Year"] = metadata["Collection Date"].apply(lambda x: x.year)
+    metadata["Year"] = metadata["Collection Date"].apply(
+        lambda x: int(x.split("/")[-1])
+    )
     metadata = metadata[metadata["Host Species"] == "IRD:Human"]
     gb = metadata.groupby("Year").count().reset_index()
 
